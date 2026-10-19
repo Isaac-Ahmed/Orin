@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Orin</title>
+
+        <!--All CSS imports-->
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+
+        <!--Main coding area-->
+        <div id="mainArea">
+
+            <!--Area for coding-->
+            <div id="editor">
+                <div id="codeArea"></div>
+            </div>
+
+            <!--Area for terminal output/input-->
+            <div id="codeOutput">
+                <div id="terminal"></div>
+            </div>
+
+            <!--Project explorer-->
+            <div id="projectExplorer">
+
+                <!--Project controls-->
+                <div id="projectHeader">
+
+                    <input
+                        id="projectName"
+                        type="text"
+                        value="Orin Project"
+                        placeholder="Project name"
+                    >
+
+                    <div id="projectButtons">
+                        <button onclick="createProjectFile()">+ File</button>
+                        <button onclick="createProjectFolder()">+ Folder</button>
+                        <button onclick="renameSelectedProjectItem()">Rename</button>
+                        <button onclick="moveSelectedProjectItem()">Move</button>
+                        <button onclick="deleteSelectedProjectItem()">Delete</button>
+                    </div>
+
+                </div>
+
+                <!--Project files and folders-->
+                <div id="projectTree"></div>
+
+            </div>
+
+        </div>
+
+        <!--Area for buttons-->
+        <div id="buttonList">
+
+            <button
+                id="runButton"
+                onclick="toggleProgramRun()"
+            >
+                ▶ Run
+            </button>
+
+            <button
+                id="commandButton"
+                onclick="openCommandGuide()"
+            >
+                Command Guide
+            </button>
+
+        </div>
+
+
+        <!--Command guide overlay-->
+        <div
+            id="commandGuide"
+            hidden
+        >
+
+            <!--Command guide window-->
+            <div class="commandGuideWindow">
+
+                <!--Top bar-->
+                <div class="commandGuideHeader">
+
+                    <div class="commandGuideTitle">
+                        Orin Command Guide
+                    </div>
+
+                    <input
+                        id="commandSearch"
+                        type="text"
+                        placeholder="Search functions, syntax, descriptions or examples..."
+                    >
+
+                    <button
+                        class="commandGuideClose"
+                        onclick="closeCommandGuide()"
+                    >
+                        ✕
+                    </button>
+
+                </div>
+
+
+                <!--Guide contents-->
+                <div class="commandGuideBrowser">
+
+                    <!--Libraries-->
+                    <div class="commandGuideColumn">
+
+                        <div class="commandGuideColumnTitle">
+                            Library
+                        </div>
+
+                        <div
+                            id="libraryList"
+                            class="commandGuideList"
+                        ></div>
+
+                    </div>
+
+
+                    <!--Files-->
+                    <div class="commandGuideColumn">
+
+                        <div class="commandGuideColumnTitle">
+                            File
+                        </div>
+
+                        <div
+                            id="moduleList"
+                            class="commandGuideList"
+                        ></div>
+
+                    </div>
+
+
+                    <!--Functions-->
+                    <div class="commandGuideColumn">
+
+                        <div class="commandGuideColumnTitle">
+                            Functions
+                        </div>
+
+                        <div
+                            id="commandList"
+                            class="commandGuideList"
+                        ></div>
+
+                    </div>
+
+
+                    <!--Function information-->
+                    <div class="commandGuideInformation">
+
+                        <h2 id="commandName">
+                            Select a function
+                        </h2>
+
+                        <h3>Syntax</h3>
+
+                        <pre id="commandSyntax"></pre>
+
+                        <h3>Description</h3>
+
+                        <div id="commandDescription">
+                            Select a function to see more information.
+                        </div>
+
+                        <h3>Example</h3>
+
+                        <pre id="commandExample"></pre>
+
+                        <div class="commandGuideActions">
+
+                            <button
+                                id="copyExampleButton"
+                                onclick="copyCommandExample()"
+                                disabled
+                            >
+                                Copy Example
+                            </button>
+
+                            <button
+                                id="importCommandButton"
+                                onclick="importSelectedCommandModule()"
+                                disabled
+                            >
+                                Import Module
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!--Monaco editor loader-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
+
+        <!--Orin command information-->
+        <script src="commandData.js"></script>
+
+        <!--Project manager-->
+        <script src="projectManager.js"></script>
+
+        <!--Monaco setup-->
+        <script src="monacoSetup.js"></script>
+
+        <!--Command guide-->
+        <script src="commandGuide.js"></script>
+
+        <!--Main Orin interpreter-->
+        <script src="codePlayer.js"></script>
+
+        <!--Terminal runner-->
+        <script src="terminalRunner.js"></script>
+
+    </body>
+</html>

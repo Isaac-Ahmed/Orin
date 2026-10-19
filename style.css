@@ -1,0 +1,482 @@
+body {
+    margin: 0;
+    height: 100vh;
+
+    background: #1e1e1e;
+    color: #cccccc;
+
+    overflow: hidden;
+}
+
+/* Main IDE area */
+#mainArea {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr)
+        260px;
+
+    gap: 10px;
+
+    height: 85vh;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+}
+
+/* Main editor, terminal and explorer */
+#editor,
+#codeOutput,
+#projectExplorer {
+    min-width: 0;
+    min-height: 0;
+}
+
+/* Monaco containers */
+#codeArea,
+#terminal {
+    width: 100%;
+    height: 100%;
+
+    box-sizing: border-box;
+}
+
+/* Main code editor */
+#editor {
+    overflow: hidden;
+
+    border: 1px solid #333;
+}
+
+/* Terminal */
+#codeOutput {
+    overflow: hidden;
+
+    border: 1px solid #333;
+
+    background: #1e1e1e;
+}
+
+/* Bottom controls */
+#buttonList {
+    height: 15vh;
+
+    padding: 0 20px 20px 20px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 8px;
+}
+
+#buttonList button {
+    background: #252526;
+    color: #cccccc;
+
+    border: 1px solid #444;
+
+    padding: 8px 14px;
+
+    cursor: pointer;
+}
+
+#buttonList button:hover {
+    background: #2a2d2e;
+}
+
+/* Project explorer */
+#projectExplorer {
+    background: #181818;
+
+    color: #cccccc;
+
+    border: 1px solid #333;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+/* Project header */
+#projectHeader {
+    padding: 10px;
+
+    border-bottom: 1px solid #333;
+}
+
+#projectName {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    background: #252526;
+    color: #ffffff;
+
+    border: 1px solid #444;
+
+    padding: 7px;
+
+    margin-bottom: 8px;
+
+    outline: none;
+}
+
+#projectName:focus {
+    border-color: #666;
+}
+
+/* Project buttons */
+#projectButtons {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 5px;
+}
+
+#projectButtons button {
+    width: 100%;
+
+    background: #252526;
+    color: #cccccc;
+
+    border: 1px solid #444;
+
+    padding: 6px 4px;
+
+    font-size: 12px;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+}
+
+#projectButtons button:hover {
+    background: #2a2d2e;
+}
+
+/* Project tree */
+#projectTree {
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 5px 0;
+}
+
+/* File or folder row */
+.treeItem {
+    height: 26px;
+
+    display: flex;
+    align-items: center;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    box-sizing: border-box;
+}
+
+.treeItem:hover {
+    background: #2a2d2e;
+}
+
+/* Selected tree item */
+.treeItem.selected {
+    background: #37373d;
+}
+
+/* Nested folders */
+.treeChildren {
+    margin-left: 14px;
+}
+
+/* Tree icon */
+.treeIcon {
+    width: 20px;
+
+    flex-shrink: 0;
+
+    text-align: center;
+}
+
+/* Tree file/folder name */
+.treeName {
+    min-width: 0;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+}
+
+
+/* Command guide overlay */
+#commandGuide {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    box-sizing: border-box;
+
+    background: rgba(0, 0, 0, 0.6);
+}
+
+#commandGuide[hidden] {
+    display: none;
+}
+
+
+/* Command guide window */
+.commandGuideWindow {
+    width: min(1200px, 95vw);
+    height: min(750px, 90vh);
+
+    display: flex;
+    flex-direction: column;
+
+    background: #1e1e1e;
+
+    border: 1px solid #444;
+
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+    overflow: hidden;
+}
+
+
+/* Command guide top bar */
+.commandGuideHeader {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px;
+
+    border-bottom: 1px solid #3c3c3c;
+
+    background: #181818;
+}
+
+.commandGuideTitle {
+    font-size: 18px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+#commandSearch {
+    flex: 1;
+
+    min-width: 0;
+
+    background: #252526;
+    color: #ffffff;
+
+    border: 1px solid #444;
+
+    padding: 8px 10px;
+
+    outline: none;
+}
+
+#commandSearch:focus {
+    border-color: #666;
+}
+
+.commandGuideClose {
+    background: #252526;
+    color: #cccccc;
+
+    border: 1px solid #444;
+
+    padding: 7px 11px;
+
+    cursor: pointer;
+}
+
+.commandGuideClose:hover {
+    background: #2a2d2e;
+}
+
+
+/* Command guide columns */
+.commandGuideBrowser {
+    flex: 1;
+
+    display: grid;
+
+    grid-template-columns:
+        140px
+        170px
+        210px
+        minmax(300px, 1fr);
+
+    min-height: 0;
+}
+
+.commandGuideColumn {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+    min-height: 0;
+
+    border-right: 1px solid #3c3c3c;
+}
+
+.commandGuideColumnTitle {
+    padding: 10px 12px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    border-bottom: 1px solid #3c3c3c;
+
+    background: #181818;
+}
+
+.commandGuideList {
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+}
+
+
+/* Library, file and function items */
+.guideItem {
+    display: block;
+
+    width: 100%;
+
+    padding: 9px 12px;
+
+    border: none;
+
+    background: transparent;
+    color: inherit;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+}
+
+.guideItem:hover {
+    background: #2a2d2e;
+}
+
+.guideItem.selected {
+    background: #37373d;
+}
+
+
+/* Command details */
+.commandGuideInformation {
+    min-width: 0;
+
+    padding: 18px;
+
+    overflow-y: auto;
+}
+
+.commandGuideInformation h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+
+    color: #ffffff;
+}
+
+.commandGuideInformation h3 {
+    margin-top: 18px;
+    margin-bottom: 6px;
+
+    font-size: 13px;
+
+    color: #cccccc;
+}
+
+#commandDescription {
+    line-height: 1.5;
+}
+
+#commandSyntax,
+#commandExample {
+    margin: 0;
+
+    padding: 10px;
+
+    overflow-x: auto;
+
+    white-space: pre-wrap;
+
+    border: 1px solid #333;
+    border-radius: 4px;
+
+    background: #181818;
+    color: #dcdcdc;
+
+    font-family: Consolas, "Courier New", monospace;
+}
+
+.commandGuideActions {
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 18px;
+}
+
+.commandGuideActions button {
+    background: #252526;
+    color: #cccccc;
+
+    border: 1px solid #444;
+
+    padding: 8px 12px;
+
+    cursor: pointer;
+}
+
+.commandGuideActions button:hover:not(:disabled) {
+    background: #2a2d2e;
+}
+
+.commandGuideActions button:disabled {
+    opacity: 0.5;
+
+    cursor: default;
+}
+
+.monaco-editor .overflowingContentWidgets{
+    z-index: 10000 !important;
+}
+
+.monaco-editor .monaco-hover{
+    z-index: 10000 !important;
+}

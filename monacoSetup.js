@@ -641,6 +641,7 @@ function analyseOrinModel(
             lineOffset,
             lineNumber,
             lineState,
+            localParameters,
             decorations,
             markers
         );
@@ -1940,6 +1941,7 @@ function analyseMethodCallsOnLine(
     lineOffset,
     lineNumber,
     state,
+    localParameters,
     decorations,
     markers
 ) {
@@ -1987,6 +1989,20 @@ function analyseMethodCallsOnLine(
                 receiverExpression,
                 state
             );
+
+        const rootReceiver =
+            receiverExpression
+                .split(".")[0];
+
+        const untypedParameter =
+            !objectType &&
+            localParameters.has(
+                rootReceiver
+            );
+
+        if (untypedParameter) {
+            continue;
+        }
 
         const valid =
             isMethodValidForType(

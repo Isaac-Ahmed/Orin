@@ -180,7 +180,7 @@ const orinCommandData = {
                 description:
                     "Creates an instance of a user-defined object and runs its constructor.",
                 example:
-                    "create Person person = Person(\"Dean\", 18);"
+                    "create Person person = Person(\"name1\", 18);"
             },
             {
                 name: "call object method",
@@ -488,7 +488,7 @@ const orinCommandData = {
                 description:
                     "Creates a string variable.",
                 example:
-                    "create string name = \"Dean\";"
+                    "create string name = \"name\";"
             },
             {
                 name: "getValue",
@@ -2662,9 +2662,9 @@ const orinCommandData = {
                 name: "createExpression",
                 syntax: "createExpression(value)",
                 description:
-                    "Creates a mathematical expression from a string.",
+                    "Creates a mathematical expression from a string. Supports arithmetic, grouping, implicit multiplication, powers, absolute values, logarithms, trigonometric functions, hyperbolic functions, roots and rounding functions.",
                 example:
-                    'createExpression("10e^(x+1)+ln(x)")'
+                    'createExpression("(x+x^2)/(x-1)")'
             }
         ]
     },
@@ -2686,7 +2686,7 @@ const orinCommandData = {
                 name: "isDefined",
                 syntax: "isDefined(expression, x)",
                 description:
-                    "Returns true if the expression produces a finite value at the supplied value of x.",
+                    "Returns true if the expression produces a finite real value at the supplied value of x.",
                 example:
                     "isDefined(func, 2)"
             }
@@ -2734,9 +2734,9 @@ const orinCommandData = {
                 name: "power",
                 syntax: "power(expression, value)",
                 description:
-                    "Raises the existing expression to the supplied expression.",
+                    "Raises the existing expression to another expression.",
                 example:
-                    'power(func, "2")'
+                    'power(func, "x-1")'
             },
             {
                 name: "negate",
@@ -2751,7 +2751,7 @@ const orinCommandData = {
 
     "expression.inspect": {
         description:
-            "Functions for inspecting the structure of mathematical expressions.",
+            "Functions for inspecting mathematical expressions and the syntax supported by the expression system.",
 
         commands: [
             {
@@ -2793,6 +2793,14 @@ const orinCommandData = {
                     "Returns the original expression string, or null if the expression has since been modified.",
                 example:
                     "getOriginal(func)"
+            },
+            {
+                name: "getSupportedSyntax",
+                syntax: "getSupportedSyntax()",
+                description:
+                    "Returns a formatted string listing the operators, grouping, constants, implicit multiplication and mathematical functions supported inside expressions.",
+                example:
+                    "getSupportedSyntax()"
             }
         ]
     },

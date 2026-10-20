@@ -2,12 +2,12 @@ let lineNum = 0;
 let errorEncountered = false;
 let currentSourceName = "main.orin";
 
-const modules = {};
-const objects = {};
-const variables = {};
-const variableTypes = {};
-const userFunctions = {};
-const userObjectTypes = {};
+const modules = Object.create(null);
+const objects = Object.create(null);
+const variables = Object.create(null);
+const variableTypes = Object.create(null);
+const userFunctions = Object.create(null);
+const userObjectTypes = Object.create(null);
 
 const scopeStack = [];
 const scopeTypeStack = [];
@@ -3387,16 +3387,17 @@ async function evaluateExpression(
         const argumentText =
             functionCall[2];
 
-        const args =
-            await evaluateArguments(
-                argumentText
-            );
-
         if (
             userObjectTypes[
                 functionName
             ] !== undefined
         ) {
+            const args =
+                await evaluateArguments(
+                    argumentText,
+                    true
+                );
+
             return await createUserObjectInstance(
                 functionName,
                 args
@@ -3408,11 +3409,22 @@ async function evaluateExpression(
                 functionName
             ] !== undefined
         ) {
+            const args =
+                await evaluateArguments(
+                    argumentText,
+                    true
+                );
+
             return await callUserFunction(
                 functionName,
                 args
             );
         }
+
+        const args =
+            await evaluateArguments(
+                argumentText
+            );
 
         const matches = [];
 
@@ -3956,7 +3968,8 @@ async function callUserFunction(
 
 // Evaluate function arguments
 async function evaluateArguments(
-    argumentText
+    argumentText,
+    preserveOrinValues = false
 ) {
     const rawArguments =
         splitArguments(
@@ -3974,6 +3987,24 @@ async function evaluateArguments(
             ""
         ) {
             continue;
+        }
+
+        if (preserveOrinValues) {
+            const cleanArgument =
+                argument.trim();
+
+            const variable =
+                findVariable(
+                    cleanArgument
+                );
+
+            if (variable.found) {
+                args.push(
+                    variable.value
+                );
+
+                continue;
+            }
         }
 
         args.push(
@@ -4419,16 +4450,17 @@ async function evaluateMemberChain(
                     index
                 );
 
-            const args =
-                await evaluateArguments(
-                    call.argumentText
-                );
-
             if (
                 isUserObjectInstance(
                     current
                 )
             ) {
+                const args =
+                    await evaluateArguments(
+                        call.argumentText,
+                        true
+                    );
+
                 current =
                     await callUserObjectMethod(
                         current,
@@ -4437,6 +4469,11 @@ async function evaluateMemberChain(
                     );
             }
             else {
+                const args =
+                    await evaluateArguments(
+                        call.argumentText
+                    );
+
                 const func =
                     current &&
                     current[

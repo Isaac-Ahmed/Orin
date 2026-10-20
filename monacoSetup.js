@@ -319,6 +319,11 @@ require(["vs/editor/editor.main"], function () {
             lineDecorationsWidth: 0,
             lineNumbersMinChars: 0,
 
+            guides: {
+                indentation: false,
+                bracketPairs: false
+            },
+
             minimap: {
                 enabled: false
             },

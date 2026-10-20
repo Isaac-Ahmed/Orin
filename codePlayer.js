@@ -78,7 +78,19 @@ const standardLibraryModules = {
     "file.read" : "./file/read.js",
     "file.write" : "./file/write.js",
     "file.delete" : "./file/delete.js",
-    "file.content" : "./file/content.js"
+    "file.content" : "./file/content.js",
+
+    "polynomial.create" : "./polynomial/create.js",
+    "polynomial.evaluate" : "./polynomial/evaluate.js",
+    "polynomial.modify" : "./polynomial/modify.js",
+    
+    "graph.terminal" : "./graph/terminal.js",
+    "graph.window" : "./graph/window.js",
+
+    "expression.create" : "./expression/create.js",
+    "expression.evaluate" : "./expression/evaluate.js",
+    "expression.inspect" : "./expression/inspect.js",
+    "expression.modify" : "./expression/modify.js"
 };
 
 class ReturnSignal {

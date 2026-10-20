@@ -2453,4 +2453,347 @@ const orinCommandData = {
         ]
     },
 
+    "polynomial.create": {
+        description:
+            "Functions for creating and inspecting polynomial functions.",
+
+        commands: [
+            {
+                name: "createPolynomial",
+                syntax: "createPolynomial(value)",
+                description:
+                    "Creates a polynomial from a string and automatically combines terms with matching exponents.",
+                example:
+                    'createPolynomial("4x^2+10x-3")'
+            },
+            {
+                name: "getCoefficients",
+                syntax: "getCoefficients(polynomial)",
+                description:
+                    "Returns an array containing the coefficients of the polynomial.",
+                example:
+                    "getCoefficients(func)"
+            },
+            {
+                name: "getExponents",
+                syntax: "getExponents(polynomial)",
+                description:
+                    "Returns an array containing the exponents of the polynomial.",
+                example:
+                    "getExponents(func)"
+            },
+            {
+                name: "polynomialToString",
+                syntax: "polynomialToString(polynomial)",
+                description:
+                    "Converts a polynomial back into its mathematical string representation.",
+                example:
+                    "polynomialToString(func)"
+            }
+        ]
+    },
+
+    "polynomial.modify": {
+        description:
+            "Functions for dynamically modifying an existing polynomial.",
+
+        commands: [
+            {
+                name: "add",
+                syntax: "add(polynomial, value)",
+                description:
+                    "Adds one or more polynomial terms to an existing polynomial and combines matching exponents.",
+                example:
+                    'add(func, "3x+2x^2")'
+            },
+            {
+                name: "remove",
+                syntax: "remove(polynomial, value)",
+                description:
+                    "Subtracts one or more polynomial terms from an existing polynomial and combines matching exponents.",
+                example:
+                    'remove(func, "3x")'
+            },
+            {
+                name: "setCoefficient",
+                syntax: "setCoefficient(polynomial, exponent, coefficient)",
+                description:
+                    "Sets the coefficient for a specific exponent. A coefficient of zero removes the term.",
+                example:
+                    "setCoefficient(func, 2, 5)"
+            },
+            {
+                name: "removeExponent",
+                syntax: "removeExponent(polynomial, exponent)",
+                description:
+                    "Completely removes the term with the specified exponent from the polynomial.",
+                example:
+                    "removeExponent(func, 2)"
+            }
+        ]
+    },
+
+    "polynomial.evaluate": {
+        description:
+            "Functions for evaluating and inspecting polynomial values.",
+
+        commands: [
+            {
+                name: "evaluate",
+                syntax: "evaluate(polynomial, x)",
+                description:
+                    "Evaluates the polynomial at the supplied value of x.",
+                example:
+                    "evaluate(func, 5)"
+            },
+            {
+                name: "getCoefficient",
+                syntax: "getCoefficient(polynomial, exponent)",
+                description:
+                    "Returns the coefficient associated with the specified exponent, or zero if the term does not exist.",
+                example:
+                    "getCoefficient(func, 2)"
+            },
+            {
+                name: "getDegree",
+                syntax: "getDegree(polynomial)",
+                description:
+                    "Returns the highest exponent currently present in the polynomial.",
+                example:
+                    "getDegree(func)"
+            }
+        ]
+    },
+
+    "graph.terminal": {
+        description:
+            "Functions for displaying polynomial and expression graphs inside the terminal using text characters.",
+
+        commands: [
+            {
+                name: "displayCharacters",
+                syntax: "displayCharacters(function)",
+                description:
+                    "Displays a polynomial or mathematical expression in the terminal using text characters with default graph bounds and size.",
+                example:
+                    "displayCharacters(func)"
+            },
+            {
+                name: "displayCharacters",
+                syntax: "displayCharacters(function, xMin, xMax, yMin, yMax)",
+                description:
+                    "Displays a polynomial or mathematical expression in the terminal using custom x and y bounds.",
+                example:
+                    "displayCharacters(func, -10, 10, -10, 10)"
+            },
+            {
+                name: "displayCharacters",
+                syntax: "displayCharacters(function, xMin, xMax, yMin, yMax, width, height)",
+                description:
+                    "Displays a polynomial or mathematical expression in the terminal using custom bounds and terminal graph dimensions.",
+                example:
+                    "displayCharacters(func, -10, 10, -10, 10, 61, 25)"
+            },
+            {
+                name: "getCharacters",
+                syntax: "getCharacters(function)",
+                description:
+                    "Returns a polynomial or mathematical expression graph as a string instead of displaying it.",
+                example:
+                    "getCharacters(func)"
+            },
+            {
+                name: "getCharacters",
+                syntax: "getCharacters(function, xMin, xMax, yMin, yMax)",
+                description:
+                    "Returns a polynomial or mathematical expression graph as a string using custom x and y bounds.",
+                example:
+                    "getCharacters(func, -10, 10, -10, 10)"
+            },
+            {
+                name: "getCharacters",
+                syntax: "getCharacters(function, xMin, xMax, yMin, yMax, width, height)",
+                description:
+                    "Returns a polynomial or mathematical expression graph as a string using custom bounds and graph dimensions.",
+                example:
+                    "getCharacters(func, -10, 10, -10, 10, 61, 25)"
+            }
+        ]
+    },
+
+    "graph.window": {
+        description:
+            "Functions for displaying polynomial and expression graphs in a separate browser window using a canvas.",
+
+        commands: [
+            {
+                name: "display",
+                syntax: "display(function)",
+                description:
+                    "Opens a new browser window and displays a polynomial or mathematical expression as a smooth graph using default bounds and window dimensions.",
+                example:
+                    "display(func)"
+            },
+            {
+                name: "display",
+                syntax: "display(function, xMin, xMax, yMin, yMax)",
+                description:
+                    "Opens a new browser window and displays a polynomial or mathematical expression using the specified x and y bounds.",
+                example:
+                    "display(func, -10, 10, -10, 10)"
+            },
+            {
+                name: "display",
+                syntax: "display(function, xMin, xMax, yMin, yMax, width, height)",
+                description:
+                    "Opens a new browser window and displays a polynomial or mathematical expression using custom graph bounds and window dimensions.",
+                example:
+                    "display(func, -10, 10, -10, 10, 800, 600)"
+            }
+        ]
+    },
+
+    "expression.create": {
+        description:
+            "Functions for creating mathematical expressions from text.",
+
+        commands: [
+            {
+                name: "createExpression",
+                syntax: "createExpression(value)",
+                description:
+                    "Creates a mathematical expression from a string.",
+                example:
+                    'createExpression("10e^(x+1)+ln(x)")'
+            }
+        ]
+    },
+
+    "expression.evaluate": {
+        description:
+            "Functions for evaluating mathematical expressions.",
+
+        commands: [
+            {
+                name: "evaluate",
+                syntax: "evaluate(expression, x)",
+                description:
+                    "Evaluates an expression using the supplied value of x.",
+                example:
+                    "evaluate(func, 2)"
+            },
+            {
+                name: "isDefined",
+                syntax: "isDefined(expression, x)",
+                description:
+                    "Returns true if the expression produces a finite value at the supplied value of x.",
+                example:
+                    "isDefined(func, 2)"
+            }
+        ]
+    },
+
+    "expression.modify": {
+        description:
+            "Functions for dynamically modifying an existing mathematical expression.",
+
+        commands: [
+            {
+                name: "add",
+                syntax: "add(expression, value)",
+                description:
+                    "Adds another expression to the existing expression.",
+                example:
+                    'add(func, "3x")'
+            },
+            {
+                name: "remove",
+                syntax: "remove(expression, value)",
+                description:
+                    "Subtracts another expression from the existing expression.",
+                example:
+                    'remove(func, "2")'
+            },
+            {
+                name: "multiply",
+                syntax: "multiply(expression, value)",
+                description:
+                    "Multiplies the existing expression by another expression.",
+                example:
+                    'multiply(func, "2x")'
+            },
+            {
+                name: "divide",
+                syntax: "divide(expression, value)",
+                description:
+                    "Divides the existing expression by another expression.",
+                example:
+                    'divide(func, "x+1")'
+            },
+            {
+                name: "power",
+                syntax: "power(expression, value)",
+                description:
+                    "Raises the existing expression to the supplied expression.",
+                example:
+                    'power(func, "2")'
+            },
+            {
+                name: "negate",
+                syntax: "negate(expression)",
+                description:
+                    "Negates the entire expression.",
+                example:
+                    "negate(func)"
+            }
+        ]
+    },
+
+    "expression.inspect": {
+        description:
+            "Functions for inspecting the structure of mathematical expressions.",
+
+        commands: [
+            {
+                name: "toString",
+                syntax: "toString(expression)",
+                description:
+                    "Returns a string representation of the expression tree.",
+                example:
+                    "toString(func)"
+            },
+            {
+                name: "getNodeCount",
+                syntax: "getNodeCount(expression)",
+                description:
+                    "Returns the number of nodes contained in the expression tree.",
+                example:
+                    "getNodeCount(func)"
+            },
+            {
+                name: "getDepth",
+                syntax: "getDepth(expression)",
+                description:
+                    "Returns the maximum depth of the expression tree.",
+                example:
+                    "getDepth(func)"
+            },
+            {
+                name: "getNodeTypes",
+                syntax: "getNodeTypes(expression)",
+                description:
+                    "Returns an array containing the type of every node in the expression tree.",
+                example:
+                    "getNodeTypes(func)"
+            },
+            {
+                name: "getOriginal",
+                syntax: "getOriginal(expression)",
+                description:
+                    "Returns the original expression string, or null if the expression has since been modified.",
+                example:
+                    "getOriginal(func)"
+            }
+        ]
+    },
 };

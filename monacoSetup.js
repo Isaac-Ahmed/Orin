@@ -21,7 +21,10 @@ require.config({
     }
 });
 
-require(["vs/editor/editor.main"], function () {
+require([
+    "vs/editor/editor.main",
+    "vs/language/css/monaco.contribution"
+], function () {
     monaco.languages.register({
         id: "orin"
     });
@@ -449,14 +452,49 @@ function refreshOrinAnalysis(
     targetEditor,
     targetName
 ) {
-    if (!targetEditor) {
+    if(!targetEditor){
         return;
     }
 
     const model =
         targetEditor.getModel();
 
-    if (!model) {
+    if(!model){
+        return;
+    }
+
+    if(
+        model.getLanguageId() !==
+        "orin"
+    ){
+        const oldDecorations =
+            targetName === "terminal"
+                ? terminalCallDecorations
+                : editorCallDecorations;
+
+        const newDecorations =
+            targetEditor.deltaDecorations(
+                oldDecorations,
+                []
+            );
+
+        if(
+            targetName === "terminal"
+        ){
+            terminalCallDecorations =
+                newDecorations;
+        }
+        else{
+            editorCallDecorations =
+                newDecorations;
+        }
+
+        monaco.editor.setModelMarkers(
+            model,
+            "orin-analysis",
+            []
+        );
+
         return;
     }
 
@@ -477,13 +515,13 @@ function refreshOrinAnalysis(
             result.decorations
         );
 
-    if (
+    if(
         targetName === "terminal"
-    ) {
+    ){
         terminalCallDecorations =
             newDecorations;
     }
-    else {
+    else{
         editorCallDecorations =
             newDecorations;
     }

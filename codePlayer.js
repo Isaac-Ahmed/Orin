@@ -9,6 +9,61 @@ const variableTypes = Object.create(null);
 const userFunctions = Object.create(null);
 const userObjectTypes = Object.create(null);
 
+window["orinWindowRuntime"] = {
+    values: Object.create(null),
+
+    async run(value){
+        if(typeof value !== "string"){
+            throw new Error(
+                "window action must be a string"
+            );
+        }
+
+        try {
+            return await evaluateExpression(
+                value
+            );
+        }
+        catch(error){
+            appendTerminalOutput(
+                `Window error: ${error.message}\n`
+            );
+
+            console.error(error);
+
+            return null;
+        }
+    },
+
+    register(name, value){
+        this.values[name] =
+            value;
+    },
+
+    get(name){
+        return this.values[name];
+    },
+
+    getName(value){
+        for(const name in this.values){
+            if(
+                this.values[name] ===
+                value
+            ){
+                return name;
+            }
+        }
+
+        return null;
+    },
+
+    clear(){
+        for(const name in this.values){
+            delete this.values[name];
+        }
+    }
+};
+
 const scopeStack = [];
 const scopeTypeStack = [];
 
@@ -90,7 +145,11 @@ const standardLibraryModules = {
     "expression.create" : "./expression/create.js",
     "expression.evaluate" : "./expression/evaluate.js",
     "expression.inspect" : "./expression/inspect.js",
-    "expression.modify" : "./expression/modify.js"
+    "expression.modify" : "./expression/modify.js",
+
+    "window.page" : "./window/page.js",
+    "window.button" : "./window/button.js",
+    "window.text" : "./window/text.js"
 };
 
 class ReturnSignal {
@@ -119,6 +178,8 @@ async function runCode() {
     clearObject(variableTypes);
     clearObject(userFunctions);
     clearObject(userObjectTypes);
+
+    window["orinWindowRuntime"].clear();
 
     callableModuleNames.clear();
     loadedProjectFiles.clear();
@@ -3008,10 +3069,27 @@ async function parseCreate(line) {
         );
     }
 
+    if (
+        typeof modules[moduleName].create ===
+        "function"
+    ) {
+        const createdValue =
+            await modules[
+                moduleName
+            ].create();
+
+        storeVariable(
+            objectName,
+            createdValue,
+            moduleName
+        );
+
+        return;
+    }
+
     objects[objectName] =
         modules[moduleName];
 }
-
 // Assign an existing variable
 async function parseAssignment(
     variableName,
@@ -4182,6 +4260,37 @@ function findVariable(name) {
         };
     }
 
+    const windowRuntime =
+        window[
+            "orinWindowRuntime"
+        ];
+
+    if (
+        windowRuntime &&
+        Object.prototype
+            .hasOwnProperty
+            .call(
+                windowRuntime.values,
+                name
+            )
+    ) {
+        return {
+            found:
+                true,
+
+            value:
+                windowRuntime.values[
+                    name
+                ],
+
+            scopeIndex:
+                -1,
+
+            global:
+                true
+        };
+    }
+
     return {
         found:
             false,
@@ -4223,6 +4332,22 @@ function storeVariable(
 
     variableTypes[name] =
         type;
+
+    if (
+        value !== null &&
+        typeof value === "object" &&
+        (
+            value.__orinWindowElement === true ||
+            value.__orinWindowPage === true
+        )
+    ) {
+        window[
+            "orinWindowRuntime"
+        ].register(
+            name,
+            value
+        );
+    }
 }
 
 // Assign while preserving declared type

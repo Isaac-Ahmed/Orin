@@ -2804,4 +2804,172 @@ const orinCommandData = {
             }
         ]
     },
+
+    "window.page": {
+        description:
+            "Functions for creating and controlling a graphical window page.",
+
+        commands: [
+            {
+                name: "add",
+                syntax: "<page>.add(element)",
+                description:
+                    "Adds a window element to the page.",
+                example:
+                    "window1.add(button1)"
+            },
+            {
+                name: "remove",
+                syntax: "<page>.remove(element)",
+                description:
+                    "Removes a window element from the page.",
+                example:
+                    "window1.remove(button1)"
+            },
+            {
+                name: "addAll",
+                syntax: "<page>.addAll(element1, element2, ...)",
+                description:
+                    "Adds multiple window elements to the page.",
+                example:
+                    "window1.addAll(text1, button1)"
+            },
+            {
+                name: "removeAll",
+                syntax: "<page>.removeAll(element1, element2, ...)",
+                description:
+                    "Removes multiple window elements from the page.",
+                example:
+                    "window1.removeAll(text1, button1)"
+            },
+            {
+                name: "clear",
+                syntax: "<page>.clear()",
+                description:
+                    "Removes every element from the page.",
+                example:
+                    "window1.clear()"
+            },
+            {
+                name: "show",
+                syntax: "<page>.show()",
+                description:
+                    "Opens and displays the page in a separate browser window.",
+                example:
+                    "window1.show()"
+            },
+            {
+                name: "close",
+                syntax: "<page>.close()",
+                description:
+                    "Closes the page window.",
+                example:
+                    "window1.close()"
+            },
+            {
+                name: "setStyle",
+                syntax: "<page>.setStyle(path)",
+                description:
+                    "Applies a CSS project file to the page. Calling setStyle again replaces the current stylesheet.",
+                example:
+                    'window1.setStyle("style.css")'
+            },
+            {
+                name: "removeStyle",
+                syntax: "<page>.removeStyle()",
+                description:
+                    "Removes the currently active CSS stylesheet from the page.",
+                example:
+                    "window1.removeStyle()"
+            }
+        ]
+    },
+
+    "window.button": {
+        description:
+            "Functions for creating and controlling buttons inside window pages.",
+
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<button>.setClass(className)",
+                description:
+                    "Sets the CSS class assigned to the button.",
+                example:
+                    'button1.setClass("button")'
+            },
+            {
+                name: "setX",
+                syntax: "<button>.setX(x)",
+                description:
+                    "Sets the horizontal position of the button in pixels.",
+                example:
+                    "button1.setX(10)"
+            },
+            {
+                name: "setY",
+                syntax: "<button>.setY(y)",
+                description:
+                    "Sets the vertical position of the button in pixels.",
+                example:
+                    "button1.setY(10)"
+            },
+            {
+                name: "setText",
+                syntax: "<button>.setText(text)",
+                description:
+                    "Changes the text displayed by the button.",
+                example:
+                    'button1.setText("Press")'
+            },
+            {
+                name: "onClick",
+                syntax: "<button>.onClick(action)",
+                description:
+                    "Sets the Orin function call that runs when the button is clicked.",
+                example:
+                    'button1.onClick("pressed()")'
+            }
+        ]
+    },
+
+    "window.text": {
+        description:
+            "Functions for creating and controlling text inside window pages.",
+
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<text>.setClass(className)",
+                description:
+                    "Sets the CSS class assigned to the text element.",
+                example:
+                    'text1.setClass("text")'
+            },
+            {
+                name: "setX",
+                syntax: "<text>.setX(x)",
+                description:
+                    "Sets the horizontal position of the text in pixels.",
+                example:
+                    "text1.setX(10)"
+            },
+            {
+                name: "setY",
+                syntax: "<text>.setY(y)",
+                description:
+                    "Sets the vertical position of the text in pixels.",
+                example:
+                    "text1.setY(10)"
+            },
+            {
+                name: "setText",
+                syntax: "<text>.setText(text)",
+                description:
+                    "Changes the text displayed by the element.",
+                example:
+                    'text1.setText("Changed")'
+            }
+        ]
+    },
 };

@@ -420,21 +420,59 @@ function projectDirectoryExists(path){
     return item !== null && item.type === "folder";
 }
 
+function getProjectFileLanguage(name){
+    const lowerName =
+        name.toLowerCase();
+
+    if(
+        lowerName.endsWith(
+            ".css"
+        )
+    ){
+        return "css";
+    }
+
+    return "orin";
+}
+
 // Open a project file
 function openProjectFile(id){
-    const file = findProjectItem(orinProject, id);
+    const file =
+        findProjectItem(
+            orinProject,
+            id
+        );
 
-    if(!file || file.type !== "file"){return;}
+    if(
+        !file ||
+        file.type !== "file"
+    ){
+        return;
+    }
 
-    // Save the currently open file
     if(activeFile){
-        activeFile.content = editor.getValue();
+        activeFile.content =
+            editor.getValue();
     }
 
     activeFile = file;
     selectedProjectItem = file;
 
-    editor.setValue(file.content || "");
+    const model =
+        editor.getModel();
+
+    if(model){
+        monaco.editor.setModelLanguage(
+            model,
+            getProjectFileLanguage(
+                file.name
+            )
+        );
+    }
+
+    editor.setValue(
+        file.content || ""
+    );
 
     saveProject();
     renderProjectTree();
@@ -525,44 +563,94 @@ function renderProjectItem(item, container){
 // Rename the selected file or folder
 function renameSelectedProjectItem(){
     if(!selectedProjectItem){
-        alert("Select a file or folder first.");
+        alert(
+            "Select a file or folder first."
+        );
+
         return;
     }
 
-    const currentName = selectedProjectItem.name;
+    const currentName =
+        selectedProjectItem.name;
 
-    let newName = prompt("New name:", currentName);
-
-    if(!newName){return;}
-
-    newName = newName.trim();
-
-    if(newName === ""){return;}
-
-    if(selectedProjectItem.type === "file"){
-        newName = addDefaultFileExtension(newName);
-    }
-
-    const parent = findParentFolder(orinProject, selectedProjectItem.id);
-
-    if(parent){
-        const nameAlreadyExists = parent.children.some(item =>
-            item.id !== selectedProjectItem.id &&
-            item.name === newName
+    let newName =
+        prompt(
+            "New name:",
+            currentName
         );
 
+    if(!newName){
+        return;
+    }
+
+    newName =
+        newName.trim();
+
+    if(newName === ""){
+        return;
+    }
+
+    if(
+        selectedProjectItem.type ===
+        "file"
+    ){
+        newName =
+            addDefaultFileExtension(
+                newName
+            );
+    }
+
+    const parent =
+        findParentFolder(
+            orinProject,
+            selectedProjectItem.id
+        );
+
+    if(parent){
+        const nameAlreadyExists =
+            parent.children.some(
+                item =>
+                    item.id !==
+                        selectedProjectItem.id &&
+                    item.name ===
+                        newName
+            );
+
         if(nameAlreadyExists){
-            alert("A file or folder with that name already exists.");
+            alert(
+                "A file or folder with that name already exists."
+            );
+
             return;
         }
     }
 
-    selectedProjectItem.name = newName;
+    selectedProjectItem.name =
+        newName;
+
+    if(
+        selectedProjectItem.type ===
+            "file" &&
+        activeFile &&
+        activeFile.id ===
+            selectedProjectItem.id
+    ){
+        const model =
+            editor.getModel();
+
+        if(model){
+            monaco.editor.setModelLanguage(
+                model,
+                getProjectFileLanguage(
+                    newName
+                )
+            );
+        }
+    }
 
     saveProject();
     renderProjectTree();
 }
-
 // Delete the selected file or folder
 function deleteSelectedProjectItem(){
     if(!selectedProjectItem){

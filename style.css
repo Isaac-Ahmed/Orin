@@ -480,3 +480,347 @@ body {
 .monaco-editor .monaco-hover{
     z-index: 10000 !important;
 }
+
+/*image shower*/
+#projectImagePreview {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.7);
+
+    align-items: center;
+    justify-content: center;
+
+    z-index: 1000;
+}
+
+#projectImagePreview.open {
+    display: flex;
+}
+
+.projectImagePreviewWindow {
+    width: 80%;
+    max-width: 900px;
+    max-height: 85%;
+
+    background: #1e1e1e;
+    color: white;
+
+    border: 1px solid #444444;
+    border-radius: 8px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+.projectImagePreviewHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 10px 14px;
+
+    background: #252526;
+    border-bottom: 1px solid #444444;
+}
+
+.projectImagePreviewTitle {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.projectImagePreviewClose {
+    background: transparent;
+    color: white;
+
+    border: none;
+
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+.projectImagePreviewContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    overflow: auto;
+}
+
+#projectImagePreviewImage {
+    display: block;
+
+    max-width: 100%;
+    max-height: 70vh;
+
+    object-fit: contain;
+}
+
+/* Window guide overlay */
+#windowGuide {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    box-sizing: border-box;
+
+    background: rgba(0, 0, 0, 0.6);
+}
+
+#windowGuide[hidden] {
+    display: none;
+}
+
+
+/* Window guide window */
+.windowGuideWindow {
+    width: min(1100px, 95vw);
+    height: min(750px, 90vh);
+
+    display: flex;
+    flex-direction: column;
+
+    background: #1e1e1e;
+    color: #cccccc;
+
+    border: 1px solid #444;
+
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+    overflow: hidden;
+}
+
+
+/* Window guide header */
+.windowGuideHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 12px;
+
+    background: #181818;
+
+    border-bottom: 1px solid #3c3c3c;
+}
+
+.windowGuideTitle {
+    font-size: 18px;
+    font-weight: 600;
+
+    color: #ffffff;
+}
+
+.windowGuideClose {
+    background: #252526;
+    color: #cccccc;
+
+    border: 1px solid #444;
+
+    padding: 7px 11px;
+
+    cursor: pointer;
+}
+
+.windowGuideClose:hover {
+    background: #2a2d2e;
+}
+
+
+/* Page / Layout / Node buttons */
+.windowGuideCategories {
+    display: flex;
+
+    gap: 8px;
+
+    padding: 12px;
+
+    background: #181818;
+
+    border-bottom: 1px solid #3c3c3c;
+}
+
+.windowGuideCategoryButton {
+    min-width: 100px;
+
+    background: #252526;
+    color: #cccccc;
+
+    border: 1px solid #444;
+
+    padding: 8px 14px;
+
+    cursor: pointer;
+}
+
+.windowGuideCategoryButton:hover {
+    background: #2a2d2e;
+}
+
+.windowGuideCategoryButton.selected {
+    background: #37373d;
+
+    border-color: #666;
+
+    color: #ffffff;
+}
+
+
+/* File selector */
+.windowGuideFileSelection {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    background: #181818;
+
+    border-bottom: 1px solid #3c3c3c;
+}
+
+.windowGuideFileSelection label {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+#windowGuideFile {
+    min-width: 220px;
+
+    background: #252526;
+    color: #ffffff;
+
+    border: 1px solid #444;
+
+    padding: 7px;
+
+    outline: none;
+}
+
+#windowGuideFile:focus {
+    border-color: #666;
+}
+
+#windowGuideFile:disabled {
+    opacity: 0.45;
+
+    cursor: not-allowed;
+}
+
+
+/* Functions and CSS columns */
+.windowGuideInformation {
+    flex: 1;
+
+    min-height: 0;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+}
+
+.windowGuideSection {
+    min-width: 0;
+    min-height: 0;
+
+    padding: 18px;
+
+    overflow-y: auto;
+}
+
+.windowGuideSection:first-child {
+    border-right: 1px solid #3c3c3c;
+}
+
+.windowGuideSection h2 {
+    margin-top: 0;
+
+    color: #ffffff;
+
+    border-bottom: 1px solid #3c3c3c;
+
+    padding-bottom: 10px;
+}
+
+
+/* Function entries */
+.windowGuideFunction {
+    margin-bottom: 20px;
+
+    padding-bottom: 16px;
+
+    border-bottom: 1px solid #333;
+}
+
+.windowGuideFunction h3 {
+    margin-top: 0;
+    margin-bottom: 6px;
+
+    color: #ffffff;
+}
+
+.windowGuideFunction p {
+    margin-bottom: 0;
+
+    line-height: 1.5;
+}
+
+
+/* Code examples */
+.windowGuideSection pre {
+    padding: 10px;
+
+    overflow-x: auto;
+
+    white-space: pre-wrap;
+
+    background: #181818;
+    color: #dcdcdc;
+
+    border: 1px solid #333;
+    border-radius: 4px;
+
+    font-family: Consolas, "Courier New", monospace;
+}
+
+/* Global scrollbars */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #666666 #1e1e1e;
+}
+
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #666666;
+    border-radius: 5px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: #888888;
+}

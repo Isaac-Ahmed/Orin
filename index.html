@@ -36,11 +36,43 @@
                     >
 
                     <div id="projectButtons">
-                        <button onclick="createProjectFile()">+ File</button>
-                        <button onclick="createProjectFolder()">+ Folder</button>
-                        <button onclick="renameSelectedProjectItem()">Rename</button>
-                        <button onclick="moveSelectedProjectItem()">Move</button>
-                        <button onclick="deleteSelectedProjectItem()">Delete</button>
+
+                        <button
+                            onclick="createProjectFile()"
+                        >
+                            + File
+                        </button>
+
+                        <button
+                            onclick="createProjectFolder()"
+                        >
+                            + Folder
+                        </button>
+
+                        <button
+                            onclick="renameSelectedProjectItem()"
+                        >
+                            Rename
+                        </button>
+
+                        <button
+                            onclick="moveSelectedProjectItem()"
+                        >
+                            Move
+                        </button>
+
+                        <button
+                            onclick="deleteSelectedProjectItem()"
+                        >
+                            Delete
+                        </button>
+
+                        <button
+                            onclick="uploadProjectFiles()"
+                        >
+                            Upload
+                        </button>
+
                     </div>
 
                 </div>
@@ -52,7 +84,8 @@
 
         </div>
 
-        <!--Area for buttons-->
+
+        <!--Area for main buttons-->
         <div id="buttonList">
 
             <button
@@ -67,6 +100,13 @@
                 onclick="openCommandGuide()"
             >
                 Command Guide
+            </button>
+
+            <button
+                id="windowGuideButton"
+                onclick="openWindowGuide()"
+            >
+                Window Guide
             </button>
 
         </div>
@@ -202,6 +242,151 @@
         </div>
 
 
+        <!--Window guide overlay-->
+        <div
+            id="windowGuide"
+            hidden
+        >
+
+            <div class="windowGuideWindow">
+
+                <div class="windowGuideHeader">
+
+                    <div class="windowGuideTitle">
+                        Orin Window Guide
+                    </div>
+
+                    <button
+                        class="windowGuideClose"
+                        onclick="closeWindowGuide()"
+                    >
+                        ✕
+                    </button>
+
+                </div>
+
+
+                <!--Category selection-->
+                <div class="windowGuideCategories">
+
+                    <button
+                        class="windowGuideCategoryButton"
+                        data-window-category="page"
+                        onclick="selectWindowGuideCategory('page')"
+                    >
+                        Page
+                    </button>
+
+                    <button
+                        class="windowGuideCategoryButton"
+                        data-window-category="layout"
+                        onclick="selectWindowGuideCategory('layout')"
+                    >
+                        Layout
+                    </button>
+
+                    <button
+                        class="windowGuideCategoryButton"
+                        data-window-category="node"
+                        onclick="selectWindowGuideCategory('node')"
+                    >
+                        Node
+                    </button>
+
+                </div>
+
+
+                <!--File selection-->
+                <div class="windowGuideFileSelection">
+
+                    <label for="windowGuideFile">
+                        File
+                    </label>
+
+                    <select
+                        id="windowGuideFile"
+                        onchange="selectWindowGuideFile()"
+                    ></select>
+
+                </div>
+
+
+                <!--Main guide area-->
+                <div class="windowGuideInformation">
+
+                    <!--Functions-->
+                    <div class="windowGuideSection">
+
+                        <h2>
+                            Functions
+                        </h2>
+
+                        <div
+                            id="windowGuideFunctions"
+                        ></div>
+
+                    </div>
+
+
+                    <!--CSS-->
+                    <div class="windowGuideSection">
+
+                        <h2>
+                            CSS
+                        </h2>
+
+                        <div
+                            id="windowGuideCSS"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!--Project image preview overlay-->
+        <div
+            id="projectImagePreview"
+        >
+
+            <div class="projectImagePreviewWindow">
+
+                <div class="projectImagePreviewHeader">
+
+                    <div
+                        id="projectImagePreviewTitle"
+                        class="projectImagePreviewTitle"
+                    >
+                        Image
+                    </div>
+
+                    <button
+                        class="projectImagePreviewClose"
+                        onclick="closeProjectImagePreview()"
+                    >
+                        ✕
+                    </button>
+
+                </div>
+
+                <div class="projectImagePreviewContent">
+
+                    <img
+                        id="projectImagePreviewImage"
+                        alt=""
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
         <!--Monaco editor loader-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
 
@@ -216,6 +401,9 @@
 
         <!--Command guide-->
         <script src="commandGuide.js"></script>
+
+        <!--Window guide-->
+        <script src="windowGuide.js"></script>
 
         <!--Main Orin interpreter-->
         <script src="codePlayer.js"></script>

@@ -10,7 +10,7 @@ const CONSTRUCTOR_DEFINITION_REGEX = /^\s*constructor\s*\(([^)]*)\)\s*\{/;
 const IMPORT_REGEX = /^\s*import\s+([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\s*;\s*$/;
 const CREATE_OBJECT_REGEX = /^\s*create\s+([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\s+([A-Za-z_$][\w$]*)\s*;\s*$/;
 const CREATE_VALUE_REGEX = /^\s*create\s+([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\s+([A-Za-z_$][\w$]*)\s*=\s*(\S(?:.*\S)?)\s*;\s*$/;
-const OBJECT_FIELD_REGEX = /^\s*create\s+(?:private|public)\s+([A-Za-z_$][\w$]*)\s+([A-Za-z_$][\w$]*)\s*;\s*$/;
+const OBJECT_FIELD_REGEX = /^\s*create\s+(?:private|public)\s+([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\s+([A-Za-z_$][\w$]*)\s*;\s*$/;
 const METHOD_CALL_REGEX = /([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\.([A-Za-z_$][\w$]*)\s*\(/g;
 const FUNCTION_CALL_REGEX = /[A-Za-z_$][\w$]*\s*\(/g;
 const FIELD_ACCESS_REGEX = /([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\.([A-Za-z_$][\w$]*)\b(?!\s*\()/g;
@@ -991,7 +991,7 @@ function parseTypedParameters(parameterText) {
 
         const match =
             parameter.match(
-                /^(?:([A-Za-z_$][\w$]*)\s+)?([A-Za-z_$][\w$]*)$/
+                /^(?:([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\s+)?([A-Za-z_$][\w$]*)$/
             );
 
         if (!match) {

@@ -148,8 +148,22 @@ const standardLibraryModules = {
     "expression.modify" : "./expression/modify.js",
 
     "window.page" : "./window/page.js",
-    "window.button" : "./window/button.js",
-    "window.text" : "./window/text.js"
+
+    "window.node.button" : "./window/node/button.js",
+    "window.node.text" : "./window/node/text.js",
+    "window.node.input" : "./window/node/input.js",
+    "window.node.textarea" : "./window/node/textarea.js",
+    "window.node.radiobutton" : "./window/node/radiobutton.js",
+    "window.node.dropdown" : "./window/node/dropdown.js",
+    "window.node.list" : "./window/node/list.js",
+    "window.node.spreadsheet" : "./window/node/spreadsheet.js",
+    "window.node.image" : "./window/node/image.js",
+    "window.node.checkbox" : "./window/node/checkbox.js",
+    "window.node.shape" : "./window/node/shape.js",
+
+    "window.layout.container" : "./window/layout/container.js",
+    "window.layout.column" : "./window/layout/column.js",
+    "window.layout.row" : "./window/layout/row.js"
 };
 
 class ReturnSignal {
@@ -1929,7 +1943,7 @@ function registerUserObjectType(
         // Field
         const fieldMatch =
             cleanLine.match(
-                /^create\s+(private|public)\s+([A-Za-z_$][\w$]*)\s+([A-Za-z_$][\w$]*)\s*;$/
+                /^create\s+(private|public)\s+([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\s+([A-Za-z_$][\w$]*)\s*;$/
             );
 
         if (fieldMatch) {
@@ -2201,7 +2215,7 @@ function parseFunctionParameters(
 
         const match =
             parameter.match(
-                /^(?:([A-Za-z_$][\w$]*)\s+)?([A-Za-z_$][\w$]*)$/
+                /^(?:([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\s+)?([A-Za-z_$][\w$]*)$/
             );
 
         if (!match) {
@@ -2658,6 +2672,35 @@ function getStandardFolderModules(
     return matches;
 }
 
+function setModuleValueType(
+    value,
+    typeName
+){
+    if(
+        value !== null &&
+        typeof value === "object" &&
+        builtInTypes[typeName] ===
+            undefined
+    ){
+        value.__orinModuleType =
+            typeName;
+    }
+
+    return value;
+}
+
+function isModuleValueType(
+    value,
+    typeName
+){
+    return (
+        value !== null &&
+        typeof value === "object" &&
+        value.__orinModuleType ===
+            typeName
+    );
+}
+
 // Attempt to import a project path
 async function tryImportProjectPath(
     importName
@@ -3016,7 +3059,7 @@ async function parseCreate(line) {
                 expression
             );
 
-        const createdValue =
+        let createdValue =
             value === null
                 ? null
                 : await modules[
@@ -3024,6 +3067,12 @@ async function parseCreate(line) {
                 ].create(
                     value
                 );
+
+        createdValue =
+            setModuleValueType(
+                createdValue,
+                typeName
+            );
 
         storeVariable(
             variableName,
@@ -3073,10 +3122,16 @@ async function parseCreate(line) {
         typeof modules[moduleName].create ===
         "function"
     ) {
-        const createdValue =
+        let createdValue =
             await modules[
                 moduleName
             ].create();
+
+        createdValue =
+            setModuleValueType(
+                createdValue,
+                moduleName
+            );
 
         storeVariable(
             objectName,
@@ -3090,6 +3145,7 @@ async function parseCreate(line) {
     objects[objectName] =
         modules[moduleName];
 }
+
 // Assign an existing variable
 async function parseAssignment(
     variableName,
@@ -3844,6 +3900,25 @@ function validateFunctionArgument(
         );
     }
 
+    if (
+        builtInTypes[
+            parameter.type
+        ] === undefined
+    ) {
+        if (
+            !isModuleValueType(
+                value,
+                parameter.type
+            )
+        ) {
+            throw new Error(
+                `function '${functionName}' parameter '${parameter.name}' must be ${parameter.type}`
+            );
+        }
+
+        return;
+    }
+
     value =
         getRawValue(
             value
@@ -3961,6 +4036,9 @@ async function callUserFunction(
         }
         else if (
             parameter.type &&
+            builtInTypes[
+                parameter.type
+            ] !== undefined &&
             modules[
                 parameter.type
             ] &&
@@ -4415,6 +4493,28 @@ async function assignVariable(
     else if (
         type &&
         modules[type] &&
+        builtInTypes[type] ===
+            undefined
+    ) {
+        if (
+            !isModuleValueType(
+                value,
+                type
+            )
+        ) {
+            throw new Error(
+                `value must be ${type}`
+            );
+        }
+
+        storedValue =
+            value;
+    }
+    else if (
+        type &&
+        builtInTypes[type] !==
+            undefined &&
+        modules[type] &&
         typeof modules[type].create ===
             "function"
     ) {
@@ -4447,6 +4547,9 @@ function getRawValue(value) {
     if (
         value !== null &&
         typeof value === "object" &&
+        value.__orinWindowElement !== true &&
+        value.__orinWindowPage !== true &&
+        value.__orinModuleType === undefined &&
         typeof value.getValue ===
             "function"
     ) {
@@ -4935,6 +5038,9 @@ async function callUserObjectMember(
         }
         else if (
             parameter.type &&
+            builtInTypes[
+                parameter.type
+            ] !== undefined &&
             modules[
                 parameter.type
             ] &&
@@ -5011,7 +5117,6 @@ async function callUserObjectMember(
             previousLine;
     }
 }
-
 // Read a field
 function getUserObjectField(
     instance,
@@ -5103,6 +5208,34 @@ async function setUserObjectField(
     }
 
     if (
+        modules[
+            field.type
+        ] &&
+        builtInTypes[
+            field.type
+        ] === undefined
+    ) {
+        if (
+            !isModuleValueType(
+                value,
+                field.type
+            )
+        ) {
+            throw new Error(
+                `field '${fieldName}' must be ${field.type}`
+            );
+        }
+
+        field.value =
+            value;
+
+        return;
+    }
+
+    if (
+        builtInTypes[
+            field.type
+        ] === undefined ||
         !modules[
             field.type
         ] ||

@@ -2885,7 +2885,7 @@ const orinCommandData = {
         ]
     },
 
-    "window.button": {
+    "window.node.button": {
         description:
             "Functions for creating and controlling buttons inside window pages.",
 
@@ -2933,7 +2933,7 @@ const orinCommandData = {
         ]
     },
 
-    "window.text": {
+    "window.node.text": {
         description:
             "Functions for creating and controlling text inside window pages.",
 
@@ -2969,6 +2969,864 @@ const orinCommandData = {
                     "Changes the text displayed by the element.",
                 example:
                     'text1.setText("Changed")'
+            }
+        ]
+    },
+
+    "window.node.input": {
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<input>.setClass(className)",
+                description: "Sets the CSS class of the input."
+            },
+            {
+                name: "setX",
+                syntax: "<input>.setX(x)",
+                description: "Sets the horizontal position of the input."
+            },
+            {
+                name: "setY",
+                syntax: "<input>.setY(y)",
+                description: "Sets the vertical position of the input."
+            },
+            {
+                name: "setValue",
+                syntax: "<input>.setValue(value)",
+                description: "Sets the current text in the input."
+            },
+            {
+                name: "getValue",
+                syntax: "<input>.getValue()",
+                description: "Returns the current text in the input."
+            },
+            {
+                name: "setPlaceholder",
+                syntax: "<input>.setPlaceholder(value)",
+                description: "Sets the placeholder text of the input."
+            },
+            {
+                name: "setDisabled",
+                syntax: "<input>.setDisabled(value)",
+                description: "Enables or disables the input."
+            },
+            {
+                name: "onInput",
+                syntax: "<input>.onInput(action)",
+                description: "Runs an Orin action whenever the input value changes."
+            },
+            {
+                name: "onChange",
+                syntax: "<input>.onChange(action)",
+                description: "Runs an Orin action when the input change is committed."
+            }
+        ]
+    },
+
+    "window.node.textarea": {
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<textarea>.setClass(className)",
+                description: "Sets the CSS class of the textarea."
+            },
+            {
+                name: "setX",
+                syntax: "<textarea>.setX(x)",
+                description: "Sets the horizontal position of the textarea."
+            },
+            {
+                name: "setY",
+                syntax: "<textarea>.setY(y)",
+                description: "Sets the vertical position of the textarea."
+            },
+            {
+                name: "setValue",
+                syntax: "<textarea>.setValue(value)",
+                description: "Sets the current text in the textarea."
+            },
+            {
+                name: "getValue",
+                syntax: "<textarea>.getValue()",
+                description: "Returns the current text in the textarea."
+            },
+            {
+                name: "setPlaceholder",
+                syntax: "<textarea>.setPlaceholder(value)",
+                description: "Sets the placeholder text of the textarea."
+            },
+            {
+                name: "setDisabled",
+                syntax: "<textarea>.setDisabled(value)",
+                description: "Enables or disables the textarea."
+            },
+            {
+                name: "onInput",
+                syntax: "<textarea>.onInput(action)",
+                description: "Runs an Orin action whenever the textarea value changes."
+            },
+            {
+                name: "onChange",
+                syntax: "<textarea>.onChange(action)",
+                description: "Runs an Orin action when the textarea change is committed."
+            }
+        ]
+    },
+
+    "window.node.radiobutton": {
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<radiobutton>.setClass(className)",
+                description:
+                    "Sets the CSS class of the radio button."
+            },
+            {
+                name: "setX",
+                syntax: "<radiobutton>.setX(x)",
+                description:
+                    "Sets the horizontal position of the radio button."
+            },
+            {
+                name: "setY",
+                syntax: "<radiobutton>.setY(y)",
+                description:
+                    "Sets the vertical position of the radio button."
+            },
+            {
+                name: "setText",
+                syntax: "<radiobutton>.setText(text)",
+                description:
+                    "Sets the label text of the radio button."
+            },
+            {
+                name: "setValue",
+                syntax: "<radiobutton>.setValue(value)",
+                description:
+                    "Sets whether the radio button is selected."
+            },
+            {
+                name: "getValue",
+                syntax: "<radiobutton>.getValue()",
+                description:
+                    "Returns true if this radio button is selected, otherwise false."
+            },
+            {
+                name: "setGroup",
+                syntax: "<radiobutton>.setGroup(group)",
+                description:
+                    "Places the radio button into a group. Radio buttons in the same group are mutually exclusive. Radio buttons without a group can be selected independently."
+            },
+            {
+                name: "setDisabled",
+                syntax: "<radiobutton>.setDisabled(value)",
+                description:
+                    "Enables or disables the radio button."
+            },
+            {
+                name: "onChange",
+                syntax: "<radiobutton>.onChange(action)",
+                description:
+                    "Runs an Orin action when the selected state changes."
+            }
+        ]
+    },
+
+    "window.node.dropdown": {
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<dropdown>.setClass(className)",
+                description:
+                    "Sets the CSS class of the dropdown."
+            },
+            {
+                name: "setX",
+                syntax: "<dropdown>.setX(x)",
+                description:
+                    "Sets the horizontal position of the dropdown."
+            },
+            {
+                name: "setY",
+                syntax: "<dropdown>.setY(y)",
+                description:
+                    "Sets the vertical position of the dropdown."
+            },
+            {
+                name: "addOptions",
+                syntax: "<dropdown>.addOptions(options...)",
+                description:
+                    "Adds one or more options to the dropdown."
+            },
+            {
+                name: "setOptions",
+                syntax: "<dropdown>.setOptions(options...)",
+                description:
+                    "Removes all existing options and replaces them with the supplied options."
+            },
+            {
+                name: "removeOptions",
+                syntax: "<dropdown>.removeOptions(options...)",
+                description:
+                    "Removes one or more options from the dropdown."
+            },
+            {
+                name: "clearOptions",
+                syntax: "<dropdown>.clearOptions()",
+                description:
+                    "Removes every option from the dropdown."
+            },
+            {
+                name: "setValue",
+                syntax: "<dropdown>.setValue(value)",
+                description:
+                    "Selects an existing dropdown option."
+            },
+            {
+                name: "getValue",
+                syntax: "<dropdown>.getValue()",
+                description:
+                    "Returns the currently selected option."
+            },
+            {
+                name: "setDisabled",
+                syntax: "<dropdown>.setDisabled(value)",
+                description:
+                    "Enables or disables the dropdown."
+            },
+            {
+                name: "onChange",
+                syntax: "<dropdown>.onChange(action)",
+                description:
+                    "Runs an Orin action when the selected option changes."
+            }
+        ]
+    },
+
+    "window.node.list": {
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<list>.setClass(className)",
+                description:
+                    "Sets the CSS class of the list."
+            },
+            {
+                name: "setX",
+                syntax: "<list>.setX(x)",
+                description:
+                    "Sets the horizontal position of the list."
+            },
+            {
+                name: "setY",
+                syntax: "<list>.setY(y)",
+                description:
+                    "Sets the vertical position of the list."
+            },
+            {
+                name: "setOrdered",
+                syntax: "<list>.setOrdered(value)",
+                description:
+                    "Sets whether the list is ordered. True uses a numbered list and false uses a bullet list."
+            },
+            {
+                name: "add",
+                syntax: "<list>.add(values...)",
+                description:
+                    "Adds one or more string values to the end of the list."
+            },
+            {
+                name: "setItems",
+                syntax: "<list>.setItems(values...)",
+                description:
+                    "Replaces all existing list items with the supplied string values."
+            },
+            {
+                name: "set",
+                syntax: "<list>.set(index, value)",
+                description:
+                    "Changes the value at the specified zero-based index."
+            },
+            {
+                name: "remove",
+                syntax: "<list>.remove(index)",
+                description:
+                    "Removes the value at the specified zero-based index."
+            },
+            {
+                name: "getValue",
+                syntax: "<list>.getValue(index)",
+                description:
+                    "Returns the value at the specified zero-based index."
+            },
+            {
+                name: "length",
+                syntax: "<list>.length()",
+                description:
+                    "Returns the number of values in the list."
+            },
+            {
+                name: "clear",
+                syntax: "<list>.clear()",
+                description:
+                    "Removes every value from the list."
+            }
+        ]
+    },
+
+    "window.node.spreadsheet": {
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<spreadsheet>.setClass(className)",
+                description:
+                    "Sets the CSS class of the spreadsheet."
+            },
+            {
+                name: "setX",
+                syntax: "<spreadsheet>.setX(x)",
+                description:
+                    "Sets the horizontal position of the spreadsheet."
+            },
+            {
+                name: "setY",
+                syntax: "<spreadsheet>.setY(y)",
+                description:
+                    "Sets the vertical position of the spreadsheet."
+            },
+            {
+                name: "setSize",
+                syntax: "<spreadsheet>.setSize(width, height)",
+                description:
+                    "Sets the number of columns and rows in the spreadsheet. Existing cells that remain inside the new size are preserved."
+            },
+            {
+                name: "setValue",
+                syntax: "<spreadsheet>.setValue(x, y, value)",
+                description:
+                    "Sets the text value of a text cell. The cell must currently be in text mode."
+            },
+            {
+                name: "getValue",
+                syntax: "<spreadsheet>.getValue(x, y)",
+                description:
+                    "Returns the current value of a text cell. The cell must currently be in text mode."
+            },
+            {
+                name: "clearValue",
+                syntax: "<spreadsheet>.clearValue(x, y)",
+                description:
+                    "Clears the value of a text cell."
+            },
+            {
+                name: "setNode",
+                syntax: "<spreadsheet>.setNode()",
+                description:
+                    "Changes every cell in the spreadsheet to node mode so the cells cannot be typed into."
+            },
+            {
+                name: "setNode",
+                syntax: "<spreadsheet>.setNode(x, y)",
+                description:
+                    "Changes one cell to node mode so the cell cannot be typed into."
+            },
+            {
+                name: "setNode",
+                syntax: "<spreadsheet>.setNode(x, y, node)",
+                description:
+                    "Changes one cell to node mode and places a window node or layout inside it."
+            },
+            {
+                name: "setText",
+                syntax: "<spreadsheet>.setText()",
+                description:
+                    "Changes every cell to text mode. Any nodes currently inside the cells are removed."
+            },
+            {
+                name: "setText",
+                syntax: "<spreadsheet>.setText(x, y)",
+                description:
+                    "Changes one cell to text mode. Any node currently inside that cell is removed."
+            },
+            {
+                name: "setRowNode",
+                syntax: "<spreadsheet>.setRowNode(y)",
+                description:
+                    "Changes every cell in the selected row to node mode."
+            },
+            {
+                name: "setRowText",
+                syntax: "<spreadsheet>.setRowText(y)",
+                description:
+                    "Changes every cell in the selected row to text mode and removes any nodes from those cells."
+            },
+            {
+                name: "setColumnNode",
+                syntax: "<spreadsheet>.setColumnNode(x)",
+                description:
+                    "Changes every cell in the selected column to node mode."
+            },
+            {
+                name: "setColumnText",
+                syntax: "<spreadsheet>.setColumnText(x)",
+                description:
+                    "Changes every cell in the selected column to text mode and removes any nodes from those cells."
+            },
+            {
+                name: "getType",
+                syntax: "<spreadsheet>.getType(x, y)",
+                description:
+                    "Returns the current cell type as either \"text\" or \"node\"."
+            },
+            {
+                name: "getNode",
+                syntax: "<spreadsheet>.getNode(x, y)",
+                description:
+                    "Returns the window node stored in a node cell, or null if the cell does not contain a node."
+            },
+            {
+                name: "setEditable",
+                syntax: "<spreadsheet>.setEditable(value)",
+                description:
+                    "Enables or disables typing in all text cells. Node cells are unaffected."
+            },
+            {
+                name: "clear",
+                syntax: "<spreadsheet>.clear()",
+                description:
+                    "Clears the entire spreadsheet, removes all contained nodes, and resets every cell to blank text mode."
+            },
+            {
+                name: "getWidth",
+                syntax: "<spreadsheet>.getWidth()",
+                description:
+                    "Returns the number of columns in the spreadsheet."
+            },
+            {
+                name: "getHeight",
+                syntax: "<spreadsheet>.getHeight()",
+                description:
+                    "Returns the number of rows in the spreadsheet."
+            },
+            {
+                name: "onChange",
+                syntax: "<spreadsheet>.onChange(action)",
+                description:
+                    "Runs an Orin action whenever the user changes the value of a text cell."
+            }
+        ]
+    },
+
+    "window.node.image": {
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<image>.setClass(className)",
+                description:
+                    "Sets the CSS class of the image."
+            },
+            {
+                name: "setX",
+                syntax: "<image>.setX(x)",
+                description:
+                    "Sets the horizontal position of the image."
+            },
+            {
+                name: "setY",
+                syntax: "<image>.setY(y)",
+                description:
+                    "Sets the vertical position of the image."
+            },
+            {
+                name: "setWidth",
+                syntax: "<image>.setWidth(width)",
+                description:
+                    "Sets the displayed image width in pixels."
+            },
+            {
+                name: "setHeight",
+                syntax: "<image>.setHeight(height)",
+                description:
+                    "Sets the displayed image height in pixels."
+            },
+            {
+                name: "setSource",
+                syntax: "<image>.setSource(path)",
+                description:
+                    "Changes the image to another PNG file stored in the Orin project."
+            },
+            {
+                name: "setAlt",
+                syntax: "<image>.setAlt(text)",
+                description:
+                    "Sets the alternative text for the image."
+            }
+        ]
+    },
+
+    "window.node.checkbox": {
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<checkbox>.setClass(className)",
+                description:
+                    "Sets the CSS class of the checkbox."
+            },
+            {
+                name: "setX",
+                syntax: "<checkbox>.setX(x)",
+                description:
+                    "Sets the horizontal position of the checkbox."
+            },
+            {
+                name: "setY",
+                syntax: "<checkbox>.setY(y)",
+                description:
+                    "Sets the vertical position of the checkbox."
+            },
+            {
+                name: "setText",
+                syntax: "<checkbox>.setText(text)",
+                description:
+                    "Sets the label text of the checkbox."
+            },
+            {
+                name: "setValue",
+                syntax: "<checkbox>.setValue(value)",
+                description:
+                    "Sets whether the checkbox is selected."
+            },
+            {
+                name: "getValue",
+                syntax: "<checkbox>.getValue()",
+                description:
+                    "Returns true if the checkbox is selected, otherwise false."
+            },
+            {
+                name: "setDisabled",
+                syntax: "<checkbox>.setDisabled(value)",
+                description:
+                    "Enables or disables the checkbox."
+            },
+            {
+                name: "onChange",
+                syntax: "<checkbox>.onChange(action)",
+                description:
+                    "Runs an Orin action whenever the checkbox value changes."
+            }
+        ]
+    },
+
+    "window.node.shape": {
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<shape>.setClass(className)",
+                description:
+                    "Sets the CSS class of the shape."
+            },
+            {
+                name: "setX",
+                syntax: "<shape>.setX(x)",
+                description:
+                    "Sets the horizontal position of the shape."
+            },
+            {
+                name: "setY",
+                syntax: "<shape>.setY(y)",
+                description:
+                    "Sets the vertical position of the shape."
+            },
+            {
+                name: "setWidth",
+                syntax: "<shape>.setWidth(width)",
+                description:
+                    "Sets the width of the shape in pixels."
+            },
+            {
+                name: "setHeight",
+                syntax: "<shape>.setHeight(height)",
+                description:
+                    "Sets the height of the shape in pixels."
+            },
+            {
+                name: "setType",
+                syntax: "<shape>.setType(type)",
+                description:
+                    "Changes the shape type. Supports circle, ellipse, square, rectangle, triangle, line, arrow, polygon(n), and star(n)."
+            },
+            {
+                name: "getType",
+                syntax: "<shape>.getType()",
+                description:
+                    "Returns the current shape type."
+            },
+            {
+                name: "rotate",
+                syntax: "<shape>.rotate(angle)",
+                description:
+                    "Rotates the shape to an absolute angle measured in radians."
+            },
+            {
+                name: "rotateDegrees",
+                syntax: "<shape>.rotateDegrees(angle)",
+                description:
+                    "Rotates the shape to an absolute angle measured in degrees."
+            },
+            {
+                name: "setSides",
+                syntax: "<shape>.setSides(sides)",
+                description:
+                    "Changes the number of sides of a polygon. Only works with polygon shapes."
+            },
+            {
+                name: "getSides",
+                syntax: "<shape>.getSides()",
+                description:
+                    "Returns the number of sides of a polygon. Only works with polygon shapes."
+            },
+            {
+                name: "setPoints",
+                syntax: "<shape>.setPoints(points)",
+                description:
+                    "Changes the number of points of a star. Only works with star shapes."
+            },
+            {
+                name: "getPoints",
+                syntax: "<shape>.getPoints()",
+                description:
+                    "Returns the number of points of a star. Only works with star shapes."
+            },
+            {
+                name: "setHeadSize",
+                syntax: "<shape>.setHeadSize(size)",
+                description:
+                    "Changes the size of the arrow head. Only works with arrow shapes."
+            }
+        ]
+    },
+
+    "window.layout.container": {
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<container>.setClass(className)",
+                description:
+                    "Sets the CSS class of the container."
+            },
+            {
+                name: "setX",
+                syntax: "<container>.setX(x)",
+                description:
+                    "Sets the horizontal position of the container."
+            },
+            {
+                name: "setY",
+                syntax: "<container>.setY(y)",
+                description:
+                    "Sets the vertical position of the container."
+            },
+            {
+                name: "setWidth",
+                syntax: "<container>.setWidth(width)",
+                description:
+                    "Sets the width of the container in pixels."
+            },
+            {
+                name: "setHeight",
+                syntax: "<container>.setHeight(height)",
+                description:
+                    "Sets the height of the container in pixels."
+            },
+            {
+                name: "add",
+                syntax: "<container>.add(element)",
+                description:
+                    "Adds a window element to the container."
+            },
+            {
+                name: "addAll",
+                syntax: "<container>.addAll(element1, element2, ...)",
+                description:
+                    "Adds multiple window elements to the container."
+            },
+            {
+                name: "remove",
+                syntax: "<container>.remove(element)",
+                description:
+                    "Removes a window element from the container."
+            },
+            {
+                name: "removeAll",
+                syntax: "<container>.removeAll(element1, element2, ...)",
+                description:
+                    "Removes multiple window elements from the container."
+            },
+            {
+                name: "clear",
+                syntax: "<container>.clear()",
+                description:
+                    "Removes every window element from the container."
+            },
+            {
+                name: "length",
+                syntax: "<container>.length()",
+                description:
+                    "Returns the number of window elements in the container."
+            }
+        ]
+    },
+
+    "window.layout.row": {
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<row>.setClass(className)",
+                description:
+                    "Sets the CSS class of the row."
+            },
+            {
+                name: "setX",
+                syntax: "<row>.setX(x)",
+                description:
+                    "Sets the horizontal position of the row."
+            },
+            {
+                name: "setY",
+                syntax: "<row>.setY(y)",
+                description:
+                    "Sets the vertical position of the row."
+            },
+            {
+                name: "setWidth",
+                syntax: "<row>.setWidth(width)",
+                description:
+                    "Sets the width of the row in pixels."
+            },
+            {
+                name: "setHeight",
+                syntax: "<row>.setHeight(height)",
+                description:
+                    "Sets the height of the row in pixels."
+            },
+            {
+                name: "setGap",
+                syntax: "<row>.setGap(gap)",
+                description:
+                    "Sets the horizontal gap in pixels between elements in the row."
+            },
+            {
+                name: "add",
+                syntax: "<row>.add(element)",
+                description:
+                    "Adds a window element to the end of the row."
+            },
+            {
+                name: "addAll",
+                syntax: "<row>.addAll(element1, element2, ...)",
+                description:
+                    "Adds multiple window elements to the row."
+            },
+            {
+                name: "remove",
+                syntax: "<row>.remove(element)",
+                description:
+                    "Removes a window element from the row."
+            },
+            {
+                name: "removeAll",
+                syntax: "<row>.removeAll(element1, element2, ...)",
+                description:
+                    "Removes multiple window elements from the row."
+            },
+            {
+                name: "clear",
+                syntax: "<row>.clear()",
+                description:
+                    "Removes every window element from the row."
+            },
+            {
+                name: "length",
+                syntax: "<row>.length()",
+                description:
+                    "Returns the number of window elements in the row."
+            }
+        ]
+    },
+
+    "window.layout.column": {
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<column>.setClass(className)",
+                description:
+                    "Sets the CSS class of the column."
+            },
+            {
+                name: "setX",
+                syntax: "<column>.setX(x)",
+                description:
+                    "Sets the horizontal position of the column."
+            },
+            {
+                name: "setY",
+                syntax: "<column>.setY(y)",
+                description:
+                    "Sets the vertical position of the column."
+            },
+            {
+                name: "setWidth",
+                syntax: "<column>.setWidth(width)",
+                description:
+                    "Sets the width of the column in pixels."
+            },
+            {
+                name: "setHeight",
+                syntax: "<column>.setHeight(height)",
+                description:
+                    "Sets the height of the column in pixels."
+            },
+            {
+                name: "setGap",
+                syntax: "<column>.setGap(gap)",
+                description:
+                    "Sets the vertical gap in pixels between elements in the column."
+            },
+            {
+                name: "add",
+                syntax: "<column>.add(element)",
+                description:
+                    "Adds a window element to the bottom of the column."
+            },
+            {
+                name: "addAll",
+                syntax: "<column>.addAll(element1, element2, ...)",
+                description:
+                    "Adds multiple window elements to the column."
+            },
+            {
+                name: "remove",
+                syntax: "<column>.remove(element)",
+                description:
+                    "Removes a window element from the column."
+            },
+            {
+                name: "removeAll",
+                syntax: "<column>.removeAll(element1, element2, ...)",
+                description:
+                    "Removes multiple window elements from the column."
+            },
+            {
+                name: "clear",
+                syntax: "<column>.clear()",
+                description:
+                    "Removes every window element from the column."
+            },
+            {
+                name: "length",
+                syntax: "<column>.length()",
+                description:
+                    "Returns the number of window elements in the column."
             }
         ]
     },

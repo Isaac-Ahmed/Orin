@@ -190,6 +190,10 @@ function createButtonObject(value){
             element = null;
         },
 
+        __getElement(){
+            return element;
+        },
+
         __forgetElement(){
             element = null;
         }

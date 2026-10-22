@@ -1,5 +1,6 @@
 import { evaluate as evaluatePolynomial } from "../polynomial/evaluate.js";
 import { evaluate as evaluateExpression } from "../expression/evaluate.js";
+import { println } from "../terminal/output.js";
 
 function isPolynomial(func){
     return typeof func === "object" &&
@@ -185,5 +186,5 @@ export function getCharacters(func, xMin = -10, xMax = 10, yMin = -10, yMax = 10
 }
 
 export function displayCharacters(func, xMin = -10, xMax = 10, yMin = -10, yMax = 10, width = 61, height = 25){
-    return getCharacters(func, xMin, xMax, yMin, yMax, width, height);
+    println(getCharacters(func, xMin, xMax, yMin, yMax, width, height));
 }

@@ -223,6 +223,158 @@ function addDefaultFileExtension(name){
     return name;
 }
 
+function uploadProjectFiles(){
+    const folder =
+        getSelectedFolder();
+
+    const input =
+        document.createElement(
+            "input"
+        );
+
+    input.type =
+        "file";
+
+    input.multiple =
+        true;
+
+    input.addEventListener(
+        "change",
+        async function(){
+            const files =
+                Array.from(
+                    input.files || []
+                );
+
+            for(const file of files){
+                if(
+                    folder.children.some(
+                        item =>
+                            item.name ===
+                            file.name
+                    )
+                ){
+                    alert(
+                        `A file or folder named '${file.name}' already exists.`
+                    );
+
+                    continue;
+                }
+
+                const fileKind =
+                    getProjectFileKind(
+                        file.name
+                    );
+
+                let content;
+
+                if(
+                    fileKind ===
+                    "image"
+                ){
+                    content =
+                        await readProjectImageFile(
+                            file
+                        );
+                }
+                else{
+                    content =
+                        await readProjectTextFile(
+                            file
+                        );
+                }
+
+                const projectFile = {
+                    id:
+                        createProjectId(),
+
+                    type:
+                        "file",
+
+                    fileKind:
+                        fileKind,
+
+                    name:
+                        file.name,
+
+                    content:
+                        content
+                };
+
+                folder.children.push(
+                    projectFile
+                );
+            }
+
+            folder.expanded =
+                true;
+
+            saveProject();
+            renderProjectTree();
+        }
+    );
+
+    input.click();
+}
+
+function readProjectImageFile(file){
+    return new Promise(
+        (resolve, reject) => {
+            const reader =
+                new FileReader();
+
+            reader.onload =
+                function(){
+                    resolve(
+                        reader.result
+                    );
+                };
+
+            reader.onerror =
+                function(){
+                    reject(
+                        new Error(
+                            "unable to read image file"
+                        )
+                    );
+                };
+
+            reader.readAsDataURL(
+                file
+            );
+        }
+    );
+}
+
+function readProjectTextFile(file){
+    return new Promise(
+        (resolve, reject) => {
+            const reader =
+                new FileReader();
+
+            reader.onload =
+                function(){
+                    resolve(
+                        reader.result
+                    );
+                };
+
+            reader.onerror =
+                function(){
+                    reject(
+                        new Error(
+                            "unable to read file"
+                        )
+                    );
+                };
+
+            reader.readAsText(
+                file
+            );
+        }
+    );
+}
+
 // Create a file using the UI
 function createProjectFile(){
     const folder = getSelectedFolder();
@@ -245,6 +397,7 @@ function createProjectFile(){
     const file = {
         id: createProjectId(),
         type: "file",
+        fileKind: "text",
         name: name,
         content: ""
     };
@@ -304,8 +457,16 @@ function createProjectFileAtPath(path, content = ""){
     const file = {
         id: createProjectId(),
         type: "file",
-        name: details.name,
-        content: content
+        fileKind:
+            getProjectFileKind(
+                details.name
+            ),
+
+        name:
+            details.name,
+
+        content:
+            content
     };
 
     folder.children.push(file);
@@ -345,15 +506,65 @@ function createProjectDirectoryAtPath(path){
     return true;
 }
 
-// Read a project's file contents
-function readProjectFile(path){
-    const file = findProjectItemByPath(path);
+function readProjectImage(path){
+    const file =
+        findProjectItemByPath(
+            path
+        );
 
-    if(!file || file.type !== "file"){
-        throw new Error("file does not exist");
+    if(
+        !file ||
+        file.type !== "file"
+    ){
+        throw new Error(
+            "file does not exist"
+        );
     }
 
-    if(activeFile && activeFile.id === file.id && editor){
+    if(
+        getProjectFileKind(
+            file.name
+        ) !== "image"
+    ){
+        throw new Error(
+            "file is not an image"
+        );
+    }
+
+    return file.content;
+}
+
+// Read a project's file contents
+function readProjectFile(path){
+    const file =
+        findProjectItemByPath(
+            path
+        );
+
+    if(
+        !file ||
+        file.type !== "file"
+    ){
+        throw new Error(
+            "file does not exist"
+        );
+    }
+
+    if(
+        getProjectFileKind(
+            file.name
+        ) === "image"
+    ){
+        throw new Error(
+            "image files cannot be read as text"
+        );
+    }
+
+    if(
+        activeFile &&
+        activeFile.id === file.id &&
+        editor
+    ){
         return editor.getValue();
     }
 
@@ -435,6 +646,27 @@ function getProjectFileLanguage(name){
     return "orin";
 }
 
+function isProjectImageFile(name){
+    const lowerName =
+        name.toLowerCase();
+
+    return (
+        lowerName.endsWith(".png")
+    );
+}
+
+function getProjectFileKind(name){
+    if(
+        isProjectImageFile(
+            name
+        )
+    ){
+        return "image";
+    }
+
+    return "text";
+}
+
 // Open a project file
 function openProjectFile(id){
     const file =
@@ -450,13 +682,30 @@ function openProjectFile(id){
         return;
     }
 
+    selectedProjectItem =
+        file;
+
+    if(
+        getProjectFileKind(
+            file.name
+        ) === "image"
+    ){
+        openProjectImagePreview(
+            file
+        );
+
+        renderProjectTree();
+
+        return;
+    }
+
     if(activeFile){
         activeFile.content =
             editor.getValue();
     }
 
-    activeFile = file;
-    selectedProjectItem = file;
+    activeFile =
+        file;
 
     const model =
         editor.getModel();
@@ -933,6 +1182,7 @@ function getAllProjectContent(path){
 // Make project file functions available to Orin libraries
 window["orinProjectFiles"] = {
     readText: readProjectFile,
+    readImage: readProjectImage,
     writeText: writeProjectFile,
     appendText: appendProjectFile,
     createFile: createProjectFileAtPath,
@@ -945,3 +1195,65 @@ window["orinProjectFiles"] = {
     exists: projectFileExists,
     directoryExists: projectDirectoryExists
 };
+
+function openProjectImagePreview(file){
+    const preview =
+        document.getElementById(
+            "projectImagePreview"
+        );
+
+    const title =
+        document.getElementById(
+            "projectImagePreviewTitle"
+        );
+
+    const image =
+        document.getElementById(
+            "projectImagePreviewImage"
+        );
+
+    if(
+        !preview ||
+        !title ||
+        !image
+    ){
+        throw new Error(
+            "image preview elements are unavailable"
+        );
+    }
+
+    title.textContent =
+        file.name;
+
+    image.src =
+        file.content;
+
+    image.alt =
+        file.name;
+
+    preview.classList.add(
+        "open"
+    );
+}
+
+function closeProjectImagePreview(){
+    const preview =
+        document.getElementById(
+            "projectImagePreview"
+        );
+
+    const image =
+        document.getElementById(
+            "projectImagePreviewImage"
+        );
+
+    if(preview){
+        preview.classList.remove(
+            "open"
+        );
+    }
+
+    if(image){
+        image.src = "";
+    }
+}

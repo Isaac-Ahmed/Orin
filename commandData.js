@@ -4085,4 +4085,106 @@ const orinCommandData = {
             }
         ]
     },
+
+    "database.sql": {
+        description:
+            "Enables PostgreSQL definitions inside Orin files using define sql blocks.",
+
+        commands: [
+            {
+                name: "define sql",
+                syntax: "define sql <name>(<parameters>) {",
+                description:
+                    "Defines a PostgreSQL block inside an Orin file. The contents of the block are treated as PostgreSQL rather than Orin code. Requires import database.sql;",
+                example:
+                    "import database.sql;\n\ndefine sql getUsers() {\n    SELECT *\n    FROM users;\n}"
+            }
+        ]
+    },
+
+    "database.runner": {
+        description:
+            "Runs PostgreSQL from Orin using SQL definitions or .sql project files.",
+
+        commands: [
+            {
+                name: "runSQL",
+                syntax: "runSQL(sqlDefinition)",
+                description:
+                    "Executes a SQL definition created using define sql. Uses the shared PostgreSQL database for the current Orin program run.",
+                example:
+                    "import database.sql;\nimport database.runner;\n\ndefine sql getUsers() {\n    SELECT *\n    FROM users;\n}\n\nrunSQL(getUsers);"
+            },
+
+            {
+                name: "runSQLFile",
+                syntax: "runSQLFile(filepath)",
+                description:
+                    "Executes a .sql project file using the shared PostgreSQL database for the current Orin program run.",
+                example:
+                    "import database.runner;\n\nrunSQLFile(\"database/setup.sql\");"
+            },
+
+            {
+                name: "reset",
+                syntax: "reset()",
+                description:
+                    "Closes the current PostgreSQL database and starts a fresh database the next time SQL is executed.",
+                example:
+                    "import database.runner;\n\nreset();"
+            }
+        ]
+    },
+
+    "database.result": {
+        description:
+            "Provides functions for reading and inspecting results returned by PostgreSQL queries.",
+
+        commands: [
+            {
+                name: "getRows",
+                syntax: "getRows(result)",
+                description:
+                    "Returns all rows from the final SQL statement in a database result.",
+                example:
+                    "create array users = getRows(runSQL(getUsers));"
+            },
+
+            {
+                name: "getRow",
+                syntax: "getRow(result, index)",
+                description:
+                    "Returns one row from a database result using a zero-based index.",
+                example:
+                    "create data.base user = getRow(runSQL(getUsers), 0);"
+            },
+
+            {
+                name: "getValue",
+                syntax: "getValue(result, rowIndex, columnName)",
+                description:
+                    "Returns the value of one column from one row in a database result.",
+                example:
+                    "create object.string name = getValue(runSQL(getUsers), 0, \"name\");"
+            },
+
+            {
+                name: "getCount",
+                syntax: "getCount(result)",
+                description:
+                    "Returns the number of rows returned by the final SQL statement.",
+                example:
+                    "create object.integer count = getCount(runSQL(getUsers));"
+            },
+
+            {
+                name: "hasRows",
+                syntax: "hasRows(result)",
+                description:
+                    "Returns true when the final SQL statement returned at least one row.",
+                example:
+                    "create object.boolean found = hasRows(runSQL(getUsers));"
+            }
+        ]
+    },
 };

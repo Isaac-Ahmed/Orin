@@ -643,6 +643,14 @@ function getProjectFileLanguage(name){
         return "css";
     }
 
+    if(
+        lowerName.endsWith(
+            ".sql"
+        )
+    ){
+        return "pgsql";
+    }
+
     return "orin";
 }
 

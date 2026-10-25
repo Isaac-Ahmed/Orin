@@ -20,6 +20,11 @@
             <!--Area for terminal output/input-->
             <div id="codeOutput">
                 <div id="terminal"></div>
+
+                <div id="sqlResultsPanel" class="sql-results-panel hidden">
+                    <div class="sql-results-header">SQL Results</div>
+                    <div id="sqlResultsContent" class="sql-results-content"></div>
+                </div>
             </div>
 
             <!--Project explorer-->
@@ -107,6 +112,13 @@
                 onclick="openWindowGuide()"
             >
                 Window Guide
+            </button>
+
+            <button
+                id="outputSwitchButton"
+                onclick="toggleOutputView()"
+            >
+                SQL Results
             </button>
 
         </div>
@@ -407,6 +419,12 @@
 
         <!--Main Orin interpreter-->
         <script src="codePlayer.js"></script>
+
+        <!--Output view switching-->
+        <script src="outputSwitcher.js"></script>
+
+        <!--SQL Runner-->
+        <script type="module" src="sqlRunner.js"></script>
 
         <!--Terminal runner-->
         <script src="terminalRunner.js"></script>

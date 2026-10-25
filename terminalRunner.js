@@ -587,12 +587,68 @@ async function loadRootDefinitionsForTerminal() {
 
 // Run or end the Monaco file
 async function toggleProgramRun() {
+
     if (
         terminalProgramRunning
     ) {
         endProgramRun();
 
         return;
+    }
+
+
+    if (
+        typeof activeFile !== "undefined" &&
+        activeFile &&
+        typeof activeFile.name === "string" &&
+        activeFile.name
+            .toLowerCase()
+            .endsWith(".sql")
+    ) {
+
+        if (
+            window.orinSql &&
+            typeof window.orinSql.run ===
+            "function"
+        ) {
+            showOutputView(
+                "sql"
+            );
+
+            await window.orinSql.run();
+
+            return;
+        }
+
+        appendTerminalText(
+            "Error: SQL runner is unavailable.\n"
+        );
+
+        return;
+    }
+
+
+    if (
+        typeof activeFile !== "undefined" &&
+        activeFile &&
+        typeof activeFile.name === "string" &&
+        !activeFile.name
+            .toLowerCase()
+            .endsWith(".orin")
+    ) {
+        appendTerminalText(
+            `Cannot run '${activeFile.name}'.\n`
+        );
+
+        return;
+    }
+
+    if (
+        window.orinSql &&
+        typeof window.orinSql.hideResults ===
+            "function"
+    ) {
+        window.orinSql.hideResults();
     }
 
     await startProgramRun();
@@ -605,6 +661,10 @@ async function startProgramRun() {
     ) {
         return;
     }
+
+    showOutputView(
+        "terminal"
+    );
 
     terminalProgramRunning =
         true;
@@ -678,6 +738,7 @@ async function returnToTerminalMode() {
     clearObject(objects);
     clearObject(variables);
     clearObject(userFunctions);
+    clearObject(sqlDefinitions);
     clearObject(userObjectTypes);
 
     callableModuleNames.clear();

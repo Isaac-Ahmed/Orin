@@ -7,6 +7,7 @@ const objects = Object.create(null);
 const variables = Object.create(null);
 const variableTypes = Object.create(null);
 const userFunctions = Object.create(null);
+const sqlDefinitions = Object.create(null);
 const userObjectTypes = Object.create(null);
 
 window["orinWindowRuntime"] = {
@@ -166,7 +167,11 @@ const standardLibraryModules = {
     "window.layout.container" : "./window/layout/container.js",
     "window.layout.column" : "./window/layout/column.js",
     "window.layout.row" : "./window/layout/row.js",
-    "window.layout.grid" : "./window/layout/grid.js"
+    "window.layout.grid" : "./window/layout/grid.js",
+
+    "database.sql" : "./database/sql.js",
+    "database.runner" : "./database/runner.js",
+    "database.result" : "./database/result.js"
 };
 
 class ReturnSignal {
@@ -194,7 +199,24 @@ async function runCode() {
     clearObject(variables);
     clearObject(variableTypes);
     clearObject(userFunctions);
+    clearObject(sqlDefinitions);    
     clearObject(userObjectTypes);
+
+    if(
+        window[
+            "orinDatabaseRunnerRuntime"
+        ] &&
+        typeof window[
+            "orinDatabaseRunnerRuntime"
+        ].reset ===
+            "function"
+    ){
+        await window[
+            "orinDatabaseRunnerRuntime"
+        ].reset(
+            true
+        );
+    }
 
     window["orinWindowRuntime"].clear();
 
@@ -1715,6 +1737,7 @@ async function executeSwitchBlock(
 }
 
 // Find and register user-defined functions and objects
+// Find and register user-defined functions, SQL definitions and objects
 function registerFunctionsFromSource(
     source,
     sourceName
@@ -1723,6 +1746,16 @@ function registerFunctionsFromSource(
         source.split(/\r?\n/);
 
     const topLevelLines = [];
+
+
+    const sqlEnabled =
+        lines.some(
+            line =>
+                /^\s*import\s+database\.sql\s*;\s*$/.test(
+                    line
+                )
+        );
+
 
     for (
         let i = 0;
@@ -1734,6 +1767,7 @@ function registerFunctionsFromSource(
 
         const cleanLine =
             originalLine.trim();
+
 
         // Object definition
         const objectMatch =
@@ -1772,6 +1806,77 @@ function registerFunctionsFromSource(
             continue;
         }
 
+
+        // SQL definition
+        const sqlMatch =
+            cleanLine.match(
+                /^define\s+sql\s+([A-Za-z_$][\w$]*)\s*\(([^)]*)\)\s*\{$/
+            );
+
+        if (sqlMatch) {
+            if (!sqlEnabled) {
+                lineNum =
+                    i + 1;
+
+                orinError(
+                    "'define sql' requires 'database.sql' to be imported"
+                );
+
+                return [];
+            }
+
+
+            const sqlName =
+                sqlMatch[1];
+
+            const parameterText =
+                sqlMatch[2]
+                    .trim();
+
+            const parameters =
+                parseFunctionParameters(
+                    parameterText
+                );
+
+            if (
+                parameters === null
+            ) {
+                return [];
+            }
+
+
+            const result =
+                readDefinitionBlock(
+                    lines,
+                    i,
+                    `SQL definition '${sqlName}'`
+                );
+
+            if (!result) {
+                return [];
+            }
+
+
+            registerSQLDefinition(
+                sqlName,
+                parameters,
+                result.body,
+                sourceName,
+                i + 1
+            );
+
+            if (errorEncountered) {
+                return [];
+            }
+
+
+            i =
+                result.endIndex;
+
+            continue;
+        }
+
+
         // Function definition
         const functionMatch =
             cleanLine.match(
@@ -1789,6 +1894,7 @@ function registerFunctionsFromSource(
 
             continue;
         }
+
 
         const functionName =
             functionMatch[1];
@@ -1808,6 +1914,7 @@ function registerFunctionsFromSource(
             return [];
         }
 
+
         const result =
             readDefinitionBlock(
                 lines,
@@ -1818,6 +1925,7 @@ function registerFunctionsFromSource(
         if (!result) {
             return [];
         }
+
 
         registerUserFunction(
             functionName,
@@ -1830,9 +1938,11 @@ function registerFunctionsFromSource(
             return [];
         }
 
+
         i =
             result.endIndex;
     }
+
 
     return topLevelLines;
 }
@@ -2258,6 +2368,75 @@ function parseFunctionParameters(
     }
 
     return parameters;
+}
+
+// Register a user-defined SQL definition
+function registerSQLDefinition(
+    name,
+    parameters,
+    body,
+    sourceName,
+    definitionLine
+) {
+    if (
+        sqlDefinitions[name] !==
+        undefined
+    ) {
+        orinError(
+            `SQL definition '${name}' has already been defined`,
+            definitionLine
+        );
+
+        return;
+    }
+
+
+    if (
+        userFunctions[name] !==
+            undefined ||
+        userObjectTypes[name] !==
+            undefined
+    ) {
+        orinError(
+            `name '${name}' is already in use`,
+            definitionLine
+        );
+
+        return;
+    }
+
+
+    const source =
+        body
+            .map(
+                sourceLine =>
+                    sourceLine.text
+            )
+            .join("\n");
+
+
+    sqlDefinitions[name] = {
+        __orinSQLDefinition:
+            true,
+
+        __orinModuleType:
+            "database.sql",
+
+        name:
+            name,
+
+        parameters:
+            parameters.map(
+                parameter =>
+                    parameter.name
+            ),
+
+        source:
+            source,
+
+        sourceName:
+            sourceName
+    };
 }
 
 // Register a user-defined function
@@ -3487,6 +3666,19 @@ async function evaluateExpression(
         );
     }
 
+
+    // SQL definition
+    if (
+        sqlDefinitions[
+            expression
+        ] !== undefined
+    ) {
+        return sqlDefinitions[
+            expression
+        ];
+    }
+
+
     // Field access and method call chains
     if (
         /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*(?:\(.*\))?)+$/.test(
@@ -4608,6 +4800,7 @@ function nameTaken(name) {
         variables[name] !== undefined ||
         objects[name] !== undefined ||
         userFunctions[name] !== undefined ||
+        sqlDefinitions[name] !== undefined ||
         userObjectTypes[name] !== undefined
     );
 }

@@ -14,6 +14,7 @@ const OBJECT_FIELD_REGEX = /^\s*create\s+(?:private|public)\s+([A-Za-z_$][\w$]*(
 const METHOD_CALL_REGEX = /([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\.([A-Za-z_$][\w$]*)\s*\(/g;
 const FUNCTION_CALL_REGEX = /[A-Za-z_$][\w$]*\s*\(/g;
 const FIELD_ACCESS_REGEX = /([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\.([A-Za-z_$][\w$]*)\b(?!\s*\()/g;
+const SQL_DEFINITION_REGEX = /^\s*define\s+sql\s+([A-Za-z_$][\w$]*)\s*\(([^)]*)\)\s*\{/;
 
 require.config({
     paths: {
@@ -23,7 +24,8 @@ require.config({
 
 require([
     "vs/editor/editor.main",
-    "vs/language/css/monaco.contribution"
+    "vs/language/css/monaco.contribution",
+    "vs/basic-languages/monaco.contribution"
 ], function () {
     monaco.languages.register({
         id: "orin"
@@ -63,6 +65,7 @@ require([
             "create",
             "define",
             "function",
+            "sql",
             "return",
             "object",
             "constructor",
@@ -86,6 +89,22 @@ require([
 
         tokenizer: {
             root: [
+                [
+                    /(define)(\s+)(sql)(\s+)([A-Za-z_$][\w$]*)(\s*\([^)]*\)\s*)(\{)/,
+                    [
+                        "keyword",
+                        "",
+                        "keyword",
+                        "",
+                        "identifier",
+                        "",
+                        {
+                            token: "delimiter.curly",
+                            next: "@sqlBlock",
+                            nextEmbedded: "pgsql"
+                        }
+                    ]
+                ],
                 [/orin>/, "terminalPrompt"],
                 [/\.\.\./, "terminalPrompt"],
                 [/\/\/.*$/, "comment"],
@@ -164,6 +183,22 @@ require([
                         token: "char.quote",
                         next: "@pop"
                     }
+                ]
+            ],
+
+            sqlBlock: [
+                [
+                    /^\s*\}/,
+                    {
+                        token: "delimiter.curly",
+                        next: "@pop",
+                        nextEmbedded: "@pop"
+                    }
+                ],
+
+                [
+                    /.+/,
+                    ""
                 ]
             ]
         }
@@ -254,6 +289,10 @@ require([
             {
                 token: "comment",
                 foreground: "6A9955"
+            },
+            {
+                token: "string.sql",
+                foreground: "CE9178"
             }
         ],
 
@@ -544,6 +583,12 @@ function analyseOrinModel(
         createInitialAnalysisState(
             model
         );
+    
+        let insideSQLDefinition =
+            false;
+
+        let sqlDefinitionDepth =
+            0;
 
     for (
         let lineNumber = 1;
@@ -567,11 +612,48 @@ function analyseOrinModel(
             continue;
         }
 
-        const logicalLine =
+       const logicalLine =
             logicalLineInfo.text;
 
         const lineOffset =
             logicalLineInfo.offset;
+
+
+        if (insideSQLDefinition) {
+            sqlDefinitionDepth +=
+                countAnalysisBraceChange(
+                    logicalLine
+                );
+
+            if (
+                sqlDefinitionDepth <= 0
+            ) {
+                insideSQLDefinition =
+                    false;
+
+                sqlDefinitionDepth =
+                    0;
+            }
+
+            continue;
+        }
+
+
+        const sqlDefinitionMatch =
+            logicalLine.match(
+                SQL_DEFINITION_REGEX
+            );
+
+        if (sqlDefinitionMatch) {
+            insideSQLDefinition =
+                true;
+
+            sqlDefinitionDepth =
+                countAnalysisBraceChange(
+                    logicalLine
+                );
+        }
+
 
         const maskedLine =
             maskStringsAndComments(
@@ -805,17 +887,34 @@ function addDefinitionsDefinedInText(
             }
 
             const functionMatch =
-                logicalLine.match(
-                    FUNCTION_DEFINITION_REGEX
-                );
+                    logicalLine.match(
+                        FUNCTION_DEFINITION_REGEX
+                    );
 
-            if (functionMatch) {
-                state.availableFunctions.add(
-                    functionMatch[1]
-                );
-            }
+                if (functionMatch) {
+                    state.availableFunctions.add(
+                        functionMatch[1]
+                    );
 
-            continue;
+                    continue;
+                }
+
+
+                const sqlMatch =
+                    logicalLine.match(
+                        SQL_DEFINITION_REGEX
+                    );
+
+                if (sqlMatch) {
+                    state.availableFunctions.add(
+                        sqlMatch[1]
+                    );
+
+                    continue;
+                }
+
+
+                continue;
         }
 
         const fieldMatch =
@@ -2342,13 +2441,16 @@ function isFunctionDefinitionAt(
         line.slice(
             0,
             startIndex
-        );
+        )
+        .trimEnd();
 
     return (
-        before.trimEnd()
-            .endsWith(
-                "define function"
-            )
+        before.endsWith(
+            "define function"
+        ) ||
+        before.endsWith(
+            "define sql"
+        )
     );
 }
 

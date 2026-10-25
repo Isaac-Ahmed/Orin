@@ -99,9 +99,49 @@ function validateStylePath(path){
     return path;
 }
 
+function createMountDocument(document){
+    return new Proxy(
+        document,
+        {
+            get(target, property){
+                if(property === "appendChild"){
+                    return function(element){
+                        return target.body.appendChild(
+                            element
+                        );
+                    };
+                }
+
+                if(property === "removeChild"){
+                    return function(element){
+                        return target.body.removeChild(
+                            element
+                        );
+                    };
+                }
+
+                const value =
+                    target[
+                        property
+                    ];
+
+                if(typeof value === "function"){
+                    return value.bind(
+                        target
+                    );
+                }
+
+                return value;
+            }
+        }
+    );
+}
+
 function createPageObject(){
     let elements = [];
     let popup = null;
+
+    let mountDocument = null;
 
     let stylePath = null;
     let styleElement = null;
@@ -114,7 +154,10 @@ function createPageObject(){
     }
 
     function mountElement(element){
-        if(!isOpen()){
+        if(
+            !isOpen() ||
+            mountDocument === null
+        ){
             return;
         }
 
@@ -126,7 +169,7 @@ function createPageObject(){
         if(
             name &&
             typeof element.__setId ===
-            "function"
+                "function"
         ){
             element.__setId(
                 name
@@ -134,14 +177,14 @@ function createPageObject(){
         }
 
         element.__mount(
-            popup.document
+            mountDocument
         );
     }
 
     function unmountElement(element){
         if(
             typeof element.__unmount ===
-            "function"
+                "function"
         ){
             element.__unmount();
         }
@@ -315,6 +358,7 @@ function createPageObject(){
         show(){
             if(isOpen()){
                 popup.focus();
+
                 return this;
             }
 
@@ -358,6 +402,11 @@ function createPageObject(){
             document.body.style.minHeight =
                 "100vh";
 
+            mountDocument =
+                createMountDocument(
+                    document
+                );
+
             styleElement = null;
 
             applyStyle();
@@ -380,6 +429,7 @@ function createPageObject(){
             }
 
             popup = null;
+            mountDocument = null;
             styleElement = null;
 
             for(
@@ -388,7 +438,7 @@ function createPageObject(){
             ){
                 if(
                     typeof element.__forgetElement ===
-                    "function"
+                        "function"
                 ){
                     element.__forgetElement();
                 }

@@ -160,10 +160,13 @@ const standardLibraryModules = {
     "window.node.image" : "./window/node/image.js",
     "window.node.checkbox" : "./window/node/checkbox.js",
     "window.node.shape" : "./window/node/shape.js",
+    "window.node.slider" : "./window/node/slider.js",
+    "window.node.progressbar" : "./window/node/progressbar.js",
 
     "window.layout.container" : "./window/layout/container.js",
     "window.layout.column" : "./window/layout/column.js",
-    "window.layout.row" : "./window/layout/row.js"
+    "window.layout.row" : "./window/layout/row.js",
+    "window.layout.grid" : "./window/layout/grid.js"
 };
 
 class ReturnSignal {
@@ -2618,20 +2621,6 @@ async function importStandardModule(
     callableModuleNames.add(
         moduleName
     );
-
-    const shortName =
-        moduleName
-            .split(".")
-            .pop();
-
-    if (
-        objects[shortName] === undefined &&
-        variables[shortName] === undefined &&
-        userFunctions[shortName] === undefined
-    ) {
-        objects[shortName] =
-            module;
-    }
 }
 
 // Get direct child modules of a standard-library folder
@@ -3209,6 +3198,7 @@ async function parseObjectFieldAssignment(
 }
 
 // Evaluate an Orin expression
+// Evaluate an Orin expression
 async function evaluateExpression(
     expression
 ) {
@@ -3521,6 +3511,7 @@ async function evaluateExpression(
         const argumentText =
             functionCall[2];
 
+        // User-defined object constructor
         if (
             userObjectTypes[
                 functionName
@@ -3538,6 +3529,7 @@ async function evaluateExpression(
             );
         }
 
+        // User-defined function
         if (
             userFunctions[
                 functionName
@@ -3555,6 +3547,7 @@ async function evaluateExpression(
             );
         }
 
+        // Imported standalone function
         const args =
             await evaluateArguments(
                 argumentText
@@ -3577,11 +3570,18 @@ async function evaluateExpression(
                     functionName
                 ] === "function"
             ) {
-                matches.push(
-                    module[
-                        functionName
-                    ]
-                );
+                matches.push({
+                    moduleName:
+                        moduleName,
+
+                    module:
+                        module,
+
+                    func:
+                        module[
+                            functionName
+                        ]
+                });
             }
         }
 
@@ -3601,9 +3601,34 @@ async function evaluateExpression(
             );
         }
 
-        return await matches[0](
-            ...args
-        );
+        const match =
+            matches[0];
+
+        let result =
+            await match.func(
+                ...args
+            );
+
+        // Preserve the module type of functions which
+        // explicitly declare that they return a module value.
+        if (
+            match.module.__orinReturnTypes &&
+            typeof match.module.__orinReturnTypes ===
+                "object" &&
+            match.module.__orinReturnTypes[
+                functionName
+            ]
+        ) {
+            result =
+                setModuleValueType(
+                    result,
+                    match.module.__orinReturnTypes[
+                        functionName
+                    ]
+                );
+        }
+
+        return result;
     }
 
     throw new Error(

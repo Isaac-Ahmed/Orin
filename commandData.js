@@ -3606,6 +3606,148 @@ const orinCommandData = {
         ]
     },
 
+    "window.node.slider": {
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<slider>.setClass(className)",
+                description: "Sets the CSS class of the slider.",
+                example: 'slider1.setClass("mainSlider");'
+            },
+            {
+                name: "setX",
+                syntax: "<slider>.setX(x)",
+                description: "Sets the horizontal position of the slider in pixels.",
+                example: "slider1.setX(20);"
+            },
+            {
+                name: "setY",
+                syntax: "<slider>.setY(y)",
+                description: "Sets the vertical position of the slider in pixels.",
+                example: "slider1.setY(20);"
+            },
+            {
+                name: "setWidth",
+                syntax: "<slider>.setWidth(width)",
+                description: "Sets the width of the slider in pixels.",
+                example: "slider1.setWidth(300);"
+            },
+            {
+                name: "setHeight",
+                syntax: "<slider>.setHeight(height)",
+                description: "Sets the height of the slider in pixels.",
+                example: "slider1.setHeight(25);"
+            },
+            {
+                name: "setMin",
+                syntax: "<slider>.setMin(minimum)",
+                description: "Sets the minimum value of the slider.",
+                example: "slider1.setMin(0);"
+            },
+            {
+                name: "setMax",
+                syntax: "<slider>.setMax(maximum)",
+                description: "Sets the maximum value of the slider.",
+                example: "slider1.setMax(100);"
+            },
+            {
+                name: "setStep",
+                syntax: "<slider>.setStep(step)",
+                description: "Sets the amount the slider value changes by for each step.",
+                example: "slider1.setStep(5);"
+            },
+            {
+                name: "setValue",
+                syntax: "<slider>.setValue(value)",
+                description: "Sets the current value of the slider.",
+                example: "slider1.setValue(50);"
+            },
+            {
+                name: "getValue",
+                syntax: "<slider>.getValue()",
+                description: "Returns the current numeric value of the slider.",
+                example: "print(slider1.getValue());"
+            },
+            {
+                name: "setDisabled",
+                syntax: "<slider>.setDisabled(disabled)",
+                description: "Enables or disables the slider.",
+                example: "slider1.setDisabled(true);"
+            },
+            {
+                name: "onInput",
+                syntax: "<slider>.onInput(action)",
+                description: "Sets an Orin action to run continuously while the slider value changes.",
+                example: 'slider1.onInput("updateValue()");'
+            },
+            {
+                name: "onChange",
+                syntax: "<slider>.onChange(action)",
+                description: "Sets an Orin action to run when the slider value is committed.",
+                example: 'slider1.onChange("valueChanged()");'
+            }
+        ]
+    },
+
+    "window.node.progressbar": {
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<progressbar>.setClass(className)",
+                description: "Sets the CSS class of the progress bar.",
+                example: 'progress1.setClass("mainProgress");'
+            },
+            {
+                name: "setX",
+                syntax: "<progressbar>.setX(x)",
+                description: "Sets the horizontal position of the progress bar in pixels.",
+                example: "progress1.setX(20);"
+            },
+            {
+                name: "setY",
+                syntax: "<progressbar>.setY(y)",
+                description: "Sets the vertical position of the progress bar in pixels.",
+                example: "progress1.setY(70);"
+            },
+            {
+                name: "setWidth",
+                syntax: "<progressbar>.setWidth(width)",
+                description: "Sets the width of the progress bar in pixels.",
+                example: "progress1.setWidth(300);"
+            },
+            {
+                name: "setHeight",
+                syntax: "<progressbar>.setHeight(height)",
+                description: "Sets the height of the progress bar in pixels.",
+                example: "progress1.setHeight(25);"
+            },
+            {
+                name: "setMax",
+                syntax: "<progressbar>.setMax(maximum)",
+                description: "Sets the maximum value of the progress bar.",
+                example: "progress1.setMax(100);"
+            },
+            {
+                name: "getMax",
+                syntax: "<progressbar>.getMax()",
+                description: "Returns the maximum value of the progress bar.",
+                example: "print(progress1.getMax());"
+            },
+            {
+                name: "setValue",
+                syntax: "<progressbar>.setValue(value)",
+                description: "Sets the current value of the progress bar.",
+                example: "progress1.setValue(50);"
+            },
+            {
+                name: "getValue",
+                syntax: "<progressbar>.getValue()",
+                description: "Returns the current value of the progress bar.",
+                example: "print(progress1.getValue());"
+            }
+        ]
+    },
+
     "window.layout.container": {
         commands: [
             {
@@ -3827,6 +3969,119 @@ const orinCommandData = {
                 syntax: "<column>.length()",
                 description:
                     "Returns the number of window elements in the column."
+            }
+        ]
+    },
+
+    "window.layout.grid": {
+        commands: [
+            {
+                name: "setClass",
+                syntax: "<grid>.setClass(className)",
+                description: "Sets the CSS class of the grid.",
+                example: 'grid1.setClass("mainGrid");'
+            },
+            {
+                name: "setX",
+                syntax: "<grid>.setX(x)",
+                description: "Sets the horizontal position of the grid in pixels.",
+                example: "grid1.setX(20);"
+            },
+            {
+                name: "setY",
+                syntax: "<grid>.setY(y)",
+                description: "Sets the vertical position of the grid in pixels.",
+                example: "grid1.setY(20);"
+            },
+            {
+                name: "setWidth",
+                syntax: "<grid>.setWidth(width)",
+                description: "Sets the width of the grid in pixels.",
+                example: "grid1.setWidth(500);"
+            },
+            {
+                name: "setHeight",
+                syntax: "<grid>.setHeight(height)",
+                description: "Sets the height of the grid in pixels.",
+                example: "grid1.setHeight(300);"
+            },
+            {
+                name: "setColumns",
+                syntax: "<grid>.setColumns(columns)",
+                description: "Sets the number of columns in the grid.",
+                example: "grid1.setColumns(3);"
+            },
+            {
+                name: "getColumns",
+                syntax: "<grid>.getColumns()",
+                description: "Returns the number of columns in the grid.",
+                example: "print(grid1.getColumns());"
+            },
+            {
+                name: "setRows",
+                syntax: "<grid>.setRows(rows)",
+                description: "Sets the number of rows in the grid.",
+                example: "grid1.setRows(2);"
+            },
+            {
+                name: "getRows",
+                syntax: "<grid>.getRows()",
+                description: "Returns the number of rows in the grid.",
+                example: "print(grid1.getRows());"
+            },
+            {
+                name: "setColumnGap",
+                syntax: "<grid>.setColumnGap(gap)",
+                description: "Sets the horizontal gap between grid columns in pixels.",
+                example: "grid1.setColumnGap(20);"
+            },
+            {
+                name: "setRowGap",
+                syntax: "<grid>.setRowGap(gap)",
+                description: "Sets the vertical gap between grid rows in pixels.",
+                example: "grid1.setRowGap(10);"
+            },
+            {
+                name: "setGap",
+                syntax: "<grid>.setGap(gap)",
+                description: "Sets both the row and column gap to the same value.",
+                example: "grid1.setGap(15);"
+            },
+            {
+                name: "set",
+                syntax: "<grid>.set(node, x, y)",
+                description: "Places a window node or layout into the grid cell at the zero-based coordinates x and y. Any existing element in that cell is replaced.",
+                example: "grid1.set(button1, 1, 0);"
+            },
+            {
+                name: "get",
+                syntax: "<grid>.get(x, y)",
+                description: "Returns the window node or layout stored in the selected grid cell.",
+                example: "print(grid1.get(1, 0));"
+            },
+            {
+                name: "remove",
+                syntax: "<grid>.remove(x, y)",
+                description: "Removes the element stored in the selected grid cell.",
+                example: "grid1.remove(1, 0);"
+            },
+            {
+                name: "clear",
+                syntax: "<grid>.clear(x, y)",
+                description: "Clears the selected grid cell.",
+                example: "grid1.clear(1, 0);"
+            },
+            {
+                name: "clearAll",
+                syntax: "<grid>.clearAll()",
+                description: "Removes every element from the grid.",
+                example: "grid1.clearAll();"
+            },
+            {
+                name: "length",
+                syntax: "<grid>.length()",
+                description: "Returns the number of occupied cells in the grid.",
+                example: "print(grid1.length());"
             }
         ]
     },

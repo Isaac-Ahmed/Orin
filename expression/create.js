@@ -640,6 +640,11 @@ function buildExpression(value){
     };
 }
 
+export const __orinReturnTypes = {
+    createExpression:
+        "expression.create"
+};
+
 
 export function create(value){
     return buildExpression(

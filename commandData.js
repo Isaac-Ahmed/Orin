@@ -4187,4 +4187,33 @@ const orinCommandData = {
             }
         ]
     },
+
+    "database.schema": {
+        description:
+            "Reads and displays the structure of the active PostgreSQL database.",
+
+        commands: [
+            {
+                name:
+                    "getSchema",
+
+                syntax:
+                    "getSchema()",
+
+                description:
+                    "Returns the active database schema."
+            },
+
+            {
+                name:
+                    "showSchema",
+
+                syntax:
+                    "showSchema(schema)",
+
+                description:
+                    "Opens a visual diagram of a database schema."
+            }
+        ]
+    },
 };

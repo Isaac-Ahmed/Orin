@@ -171,7 +171,8 @@ const standardLibraryModules = {
 
     "database.sql" : "./database/sql.js",
     "database.runner" : "./database/runner.js",
-    "database.result" : "./database/result.js"
+    "database.result" : "./database/result.js",
+    "database.schema" : "./database/schema.js"
 };
 
 class ReturnSignal {

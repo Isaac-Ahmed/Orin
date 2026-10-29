@@ -27,6 +27,81 @@ require([
     "vs/language/css/monaco.contribution",
     "vs/basic-languages/monaco.contribution"
 ], function () {
+    const pgsql =
+    monaco.languages
+        .getLanguages()
+        .find(
+            language =>
+                language.id === "pgsql"
+        );
+
+        if(
+            pgsql &&
+            typeof pgsql.loader === "function"
+        ){
+            pgsql.loader().then(
+                async definition => {
+                    const language =
+                        definition.language;
+
+                    if(!language){
+                        return;
+                    }
+
+                    try{
+                        const response =
+                            await fetch(
+                                "https://cdn.jsdelivr.net/gh/postgres/postgres@REL_18_STABLE/src/include/parser/kwlist.h"
+                            );
+
+                        const source =
+                            await response.text();
+
+                        const keywordRegex =
+                            /PG_KEYWORD\("([^"]+)"/g;
+
+                        const keywords =
+                            new Set(
+                                language.keywords || []
+                            );
+
+                        let match;
+
+                        while(
+                            (
+                                match =
+                                    keywordRegex.exec(
+                                        source
+                                    )
+                            ) !== null
+                        ){
+                            keywords.add(
+                                match[1].toUpperCase()
+                            );
+                        }
+
+                        language.keywords =
+                            Array.from(
+                                keywords
+                            );
+                    }
+                    catch(error){
+                        language.keywords =
+                            Array.from(
+                                new Set([
+                                    ...(language.keywords || []),
+                                    "ALTER"
+                                ])
+                            );
+                    }
+
+                    monaco.languages.setMonarchTokensProvider(
+                        "pgsql",
+                        language
+                    );
+                }
+            );
+        }
     monaco.languages.register({
         id: "orin"
     });
@@ -479,6 +554,10 @@ function installOrinDecorationStyles() {
 
         .monaco-editor .orin-invalid-call {
             color: #F44747 !important;
+        }
+
+        .monaco-editor .orin-test-alter {
+            color: #569CD6 !important;
         }
     `;
 

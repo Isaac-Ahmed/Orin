@@ -676,17 +676,15 @@ export async function reset(){
 // RUNTIME BRIDGE
 // ========================================
 
-window[
-    "orinDatabaseRunnerRuntime"
-] = {
+window["orinDatabaseRunnerRuntime"] = {
     reset:
         resetDatabase,
 
-    hasDatabase:
-        function(){
-            return (
-                activeDatabase !==
-                null
-            );
-        }
+    hasDatabase: function(){
+        return activeDatabase !== null;
+    },
+
+    getDatabase: async function(){
+        return getDatabase();
+    }
 };
